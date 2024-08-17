@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4921829247075368618}
   - component: {fileID: 4921829247075368598}
   - component: {fileID: 410253373328600273}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: bul moon
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -117,9 +117,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  direction: {x: 0, y: 0}
   indicate_time: 0
   spin: 0
+  reserve: 0
+  graze_val: 10
+  grazing: 0
+  dist: -1
+  graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
+  default_color: {r: 1, g: 1, b: 1, a: 1}
+  direction: {x: 0, y: 0}
 --- !u!50 &4921829247075368598
 Rigidbody2D:
   serializedVersion: 4
@@ -153,3 +159,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caacdf21ff1ce4f49a856e31f959f71d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 0
+  indicate_time: 0
+  spin: 0
+  reserve: 0
+  graze_val: 10
+  grazing: 0
+  dist: -1
+  graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
+  default_color: {r: 1, g: 1, b: 1, a: 1}

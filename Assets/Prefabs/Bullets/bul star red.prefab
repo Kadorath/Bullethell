@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1501150196022406135, guid: f3a05147f314999439f1341c53ad73e8, type: 3}
       propertyPath: m_Name
-      value: bul star
+      value: bul star red
       objectReference: {fileID: 0}
     - target: {fileID: 4928081059157440308, guid: f3a05147f314999439f1341c53ad73e8, type: 3}
       propertyPath: m_Size.x

@@ -13,11 +13,13 @@ public class EnemyBehavior : BHEntity
     protected Coroutine cur_pattern;
     protected int pattern_ind = 0;
 
+    private Collider2D[] collided_bul;
+
     private Image healthbar;
     public TextMeshProUGUI timer;
 
     public GameObject player;
-
+    
     protected GameManagerBehavior gameManager;
 
     void Start()
@@ -44,6 +46,11 @@ public class EnemyBehavior : BHEntity
             cur_pattern = StartCoroutine(patterns[pattern_ind]);
         }
 
+        collided_bul = Physics2D.OverlapBoxAll(transform.position, new Vector2(2f, 2f), 0f, LayerMask.GetMask("PlayerBullets"));
+        foreach (Collider2D bul in collided_bul) {
+            bul.gameObject.SetActive(false);
+            if (health > 0) { health -= 1; }
+        }
         if (health == 0) {
             NextPattern();
         }
@@ -141,10 +148,10 @@ public class EnemyBehavior : BHEntity
         }     
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
+    /*void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Player")) {
             other.gameObject.SetActive(false);
             if (health > 0) { health -= 1; }
         }
-    }
+    }*/
 }

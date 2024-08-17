@@ -46,11 +46,11 @@ public class BulletBehavior : MonoBehaviour
         grazing = false;
     }
 
-    void OnTriggerExit2D(Collider2D other) {
+    /*void OnTriggerExit2D(Collider2D other) {
         if (!reserve && GetComponent<Collider2D>().enabled && other.gameObject.CompareTag("Boundary")) {
             DestroySelf();
         }
-    }
+    }*/
 
     public void DestroySelf() {
         transform.localScale = new Vector3(final_scale_x, final_scale_y, 1f);

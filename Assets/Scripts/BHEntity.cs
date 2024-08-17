@@ -64,13 +64,14 @@ public class BHEntity : MonoBehaviour
     }
     
     protected GameObject SpawnActionBullet(GameObject[] pool, Vector2 start, Vector2 dest,
-        float speed, ActionBulletBehavior.AtDestination act, float delay=0f) 
+        float speed, ActionBulletBehavior.AtDestination act, float rotation=0f, float delay=0f) 
     {
         GameObject bul = FindNextBullet(pool);
         if (bul == null) { return null; }
 
         ActionBulletBehavior bul_behavior = bul.GetComponent<ActionBulletBehavior>();
         bul.transform.position = start;
+        bul.transform.rotation = Quaternion.Euler(0f,0f,rotation);
         bul_behavior.speed = speed;
         bul_behavior.destination = dest;
         bul_behavior.at_destination = act;

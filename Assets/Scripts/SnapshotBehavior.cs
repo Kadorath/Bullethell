@@ -72,7 +72,7 @@ public class SnapshotBehavior : MonoBehaviour
                 transform.localScale.y*frame_points[0].y + transform.position.y - padding),
             new Vector2(transform.localScale.x*frame_points[2].x + transform.position.x - padding,
                 transform.localScale.y*frame_points[2].y + transform.position.y + padding),
-            LayerMask.GetMask("Bullets")
+            LayerMask.GetMask("EnemyBullets")
         );
         foreach (Collider2D bul in captured_frame) {
             bul.gameObject.GetComponent<BulletBehavior>().reserve = true;
@@ -95,7 +95,7 @@ public class SnapshotBehavior : MonoBehaviour
                 transform.localScale.y*frame_points[0].y + transform.position.y - padding),
             new Vector2(transform.localScale.x*frame_points[2].x + transform.position.x - padding,
                 transform.localScale.y*frame_points[2].y + transform.position.y + padding),
-            LayerMask.GetMask("Bullets")
+            LayerMask.GetMask("EnemyBullets")
         );
         foreach (Collider2D bul in bul_to_remove) {
             bul.gameObject.SetActive(false);
@@ -117,7 +117,7 @@ public class SnapshotBehavior : MonoBehaviour
             bul.gameObject.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Background");
             bul.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
             bul.gameObject.GetComponent<BulletBehavior>().speed = 0f;
-            bul.gameObject.GetComponent<BulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 200f/255f);
+            bul.gameObject.GetComponent<BulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
             bul.gameObject.GetComponent<BulletBehavior>().ResetGraze();
             bul.gameObject.transform.SetParent(transform, true);
             bul.enabled = false;

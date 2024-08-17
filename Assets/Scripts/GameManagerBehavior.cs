@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManagerBehavior : MonoBehaviour
 {
+    public const float HO_BOUND = 8f;
+    public const float VO_BOUND = 8f;
     public GameObject enemy;
     public GameObject player;
     public int stage;
@@ -29,5 +31,37 @@ public class GameManagerBehavior : MonoBehaviour
             new_pool[i].name = bul.name;
         }
         return new_pool;
+    }
+
+    void FixedUpdate() {
+        // Boundary Detection
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(HO_BOUND,0f),new Vector2(1f,14f),0f,
+            LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
+                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
+                if (!bh.reserve && bul.enabled) {
+                    bh.DestroySelf();
+                }
+            }
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(-HO_BOUND,0f),new Vector2(1f,14f),0f,
+            LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
+                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
+                if (!bh.reserve && bul.enabled) {
+                    bh.DestroySelf();
+                }
+            }
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,VO_BOUND),new Vector2(14f,1f),0f,
+            LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
+                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
+                if (!bh.reserve && bul.enabled) {
+                    bh.DestroySelf();
+                }
+            }
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,-VO_BOUND),new Vector2(14f,1f),0f,
+            LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
+                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
+                if (!bh.reserve && bul.enabled) {
+                    bh.DestroySelf();
+                }
+            }
     }
 }
