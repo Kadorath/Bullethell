@@ -60,6 +60,7 @@ public class BHEntity : MonoBehaviour
         bul_behavior.destination = dest;
         bul_behavior.at_destination = act;
         bul_behavior.indicate_time = delay;
+        bul.GetComponent<BulletBehavior>().Spawn();        
         return bul;
     }
     

@@ -11,12 +11,20 @@ public class ActionBulletBehavior : BulletBehavior
 
     void FixedUpdate()
     {
-        // Move towards destination, and if bullet just moved to destination, call at_destination
-        if (Vector2.Distance(transform.position, destination) >= 0.001f) {
-            transform.position = Vector2.MoveTowards(transform.position, destination, speed*Time.fixedDeltaTime);
+        if(delay_time >= 0f) {
+            delay_time -= Time.fixedDeltaTime;
+            transform.localScale = new Vector3(Mathf.Lerp(final_scale_x,final_scale_y*3,delay_time/indicate_time)
+                                                ,Mathf.Lerp(final_scale_y,final_scale_y*3,delay_time/indicate_time),
+                                                1f);
+        }
+        else {
+            // Move towards destination, and if bullet just moved to destination, call at_destination
+            if (Vector2.Distance(transform.localPosition, destination) >= 0.001f) {
+                transform.localPosition = Vector2.MoveTowards(transform.localPosition, destination, speed*Time.fixedDeltaTime);
 
-            if (at_destination != null && !(Vector2.Distance(transform.position, destination) >= 0.001f)) {
-                at_destination(gameObject);
+                if (at_destination != null && !(Vector2.Distance(transform.localPosition, destination) >= 0.001f)) {
+                    at_destination(gameObject);
+                }
             }
         }
     }

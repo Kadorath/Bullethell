@@ -10,20 +10,26 @@ public class NewsieBehavior : EnemyBehavior
     public GameObject snapshot;
     public GameObject[] letter_pool;
     public GameObject[] act_letter_pool;
+    private Sprite[] act_letter_sprites;
     private Sprite[] letter_sprites;
     public GameObject[] circle_pool;
 
     protected override void InitEnemy() {
         letter_pool = gameManager.CreatePool(bul_letter, 500);
         act_letter_pool = gameManager.CreatePool(bul_act_letter, 500);
+
+        act_letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets_orange");        
+        foreach (GameObject bul in act_letter_pool) {
+            int r = Random.Range(0,28);
+            bul.GetComponent<SpriteRenderer>().sprite = act_letter_sprites[r];
+        }
         letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets");
-        int r = Random.Range(0,28);
         foreach (GameObject bul in letter_pool) {
+            int r = Random.Range(0,28);
             bul.GetComponent<SpriteRenderer>().sprite = letter_sprites[r];
-            r = Random.Range(0,28);
         }
         circle_pool = gameManager.CreatePool(bul_circle, 1000);        
-        patterns = new string[] {"Interlude2","Interlude1", "Spell1", "Spell2"};
+        patterns = new string[] {"Interlude2", "Spell1", "Interlude2", "Spell2"};
     }
 
     IEnumerator Interlude1() {
@@ -72,87 +78,120 @@ public class NewsieBehavior : EnemyBehavior
         yield return WaitForFixedDuration(1f);
         health = 2500;
         maxhealth = 2500;
-        StartCoroutine("MoveTo", new Vector2(0f, 1f));
+        StartCoroutine("MoveTo", new Vector2(0f, 2f));
         Coroutine aux1 = StartCoroutine("Inter2_aux1");
         yield return PatternTimer(60f);
         NextPattern();
     }
 
     IEnumerator Inter2_aux1() {
-        yield return WaitForFixedDuration(1f);
+        yield return WaitForFixedDuration(2f);
+        GameObject camera_frame = Instantiate(snapshot, new Vector3(0f,2f), Quaternion.identity);
+        camera_frame.transform.SetParent(transform);
+        foreach (GameObject bul in act_letter_pool) {
+            bul.transform.SetParent(camera_frame.transform, true);
+        }
+        float frame_size = 1f;
+        yield return MoveBullet(camera_frame, 8f, new Vector3(0f,1.5f,-1f), 0f, new Vector2(frame_size,frame_size));
+        StartCoroutine("Inter2_aux2", camera_frame);
         int bul_num = 6;
-        float pad = 0.25f;
-        int tog = -1; 
-        while (true) {
-            for (int i = 1; i < bul_num; i ++) {
-                SpawnActionBullet(act_letter_pool, transform.position, 
-                    new Vector2(((2*(BOUND_X-pad))/bul_num)*i - (BOUND_X-pad), BOUND_Y-pad), 3f, 
-                    (self)=>{
-                        self.GetComponent<ActionBulletBehavior>().destination = new Vector2(tog*(BOUND_X-pad),BOUND_Y-pad);
-                        self.transform.rotation = Quaternion.Euler(0f,0f,0f);
-                        self.GetComponent<ActionBulletBehavior>().at_destination = (self) => {
-                                float r = Random.Range(0f,2f);
-                                for (int i = 0; i < 5; i ++) {
-                                    SpawnStraightBullet(circle_pool, self.transform.position,
-                                        new Vector2(Mathf.Cos(r+(Mathf.PI/4)*i), Mathf.Sin(r+(Mathf.PI/4)*i)), 4f, 0f,
-                                        rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/4)*i), Mathf.Cos(r+(Mathf.PI/4)*i))));
-                                }
-                                self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                            };
-                    }, RADTODEG*(Mathf.Atan2(BOUND_Y-pad,((2*(BOUND_X-pad))/bul_num)*i - (BOUND_X-pad))));
-                SpawnActionBullet(act_letter_pool, transform.position, 
-                    new Vector2((BOUND_X-pad) - ((2*(BOUND_X-pad))/bul_num)*i, -1*(BOUND_Y-pad)), 3f, 
-                    (self)=>{
-                        self.GetComponent<ActionBulletBehavior>().destination = new Vector2(tog*(BOUND_X-pad),-1*(BOUND_Y-pad));
-                        self.transform.rotation = Quaternion.Euler(0f,0f,0f);
-                        self.GetComponent<ActionBulletBehavior>().at_destination = (self) => {
-                                float r = Random.Range(0f,2f);
-                                for (int i = 0; i < 5; i ++) {
-                                    SpawnStraightBullet(circle_pool, self.transform.position,
-                                        new Vector2(Mathf.Cos(r+(Mathf.PI/4)*i), Mathf.Sin(r+(Mathf.PI/4)*i)), 4f, 0f,
-                                        rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/4)*i), Mathf.Cos(r+(Mathf.PI/4)*i))));
-                                }
-                                self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                            };
-                    }, RADTODEG*(Mathf.Atan2(-1*(BOUND_Y-pad), (BOUND_X-pad) - ((2*(BOUND_X-pad))/bul_num)*i)));
-                yield return WaitForFixedDuration(0.5f);  
-                tog *= -1;
+
+        GameObject[] target_pts = new GameObject[bul_num*4];
+        for (int i = 0; i < bul_num*4; i ++) {
+            GameObject target_pt = new GameObject("TarPt" + i);
+            target_pt.transform.SetParent(camera_frame.transform, false);
+            int side = i/bul_num;
+            if (side == 0) {
+                target_pt.transform.localPosition = new Vector3(1f, (2f/bul_num)*i - 1f, 0f);
             }
-            for (int i = 0; i < bul_num; i ++) {
+            else if (side == 1) {
+                target_pt.transform.localPosition = new Vector3(1f - (2f/bul_num)*(i%bul_num), 1f, 0f);
+            }
+            else if (side == 2) {
+                target_pt.transform.localPosition = new Vector3(-1f, 1f - (2f/bul_num)*(i%bul_num), 0f);
+            }
+            else if (side == 3) {
+                target_pt.transform.localPosition = new Vector3((2f/bul_num)*(i%bul_num) - 1f, -1f, 0f);
+            }
+            target_pts[i] = target_pt;
+        }
+
+        int ct = 0;
+        while (true) {
+            for (int i = 0; i < bul_num*4; i ++) {
                 SpawnActionBullet(act_letter_pool, transform.position, 
-                    new Vector2(BOUND_X-pad, (BOUND_Y-pad) - ((2*(BOUND_Y-pad))/bul_num)*i), 3f, 
+                    target_pts[i].transform.localPosition, .3f, 
                     (self)=>{
-                        self.GetComponent<ActionBulletBehavior>().destination = new Vector2(BOUND_X-pad,tog*(BOUND_Y-pad));
-                        self.transform.rotation = Quaternion.Euler(0f,0f,90f);
-                        self.GetComponent<ActionBulletBehavior>().at_destination = (self) => {
-                                float r = Random.Range(0f,2f);
-                                for (int i = 0; i < 5; i ++) {
-                                    SpawnStraightBullet(circle_pool, self.transform.position,
-                                        new Vector2(Mathf.Cos(r+(Mathf.PI/4)*i), Mathf.Sin(r+(Mathf.PI/4)*i)), 4f, 0f,
-                                        rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/4)*i), Mathf.Cos(r+(Mathf.PI/4)*i))));
-                                }
-                                self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                            };
-                    }, RADTODEG*(Mathf.Atan2(-1f + (BOUND_Y-pad) - ((2*(BOUND_Y-pad))/bul_num)*i,BOUND_X-pad)));   
+                        float r = Random.Range(0f,Mathf.PI);
+                        for (int i = 0; i < 4; i ++) {
+                            SpawnStraightBullet(circle_pool, self.transform.position,
+                                new Vector2(Mathf.Cos(r+(Mathf.PI/2)*i), Mathf.Sin(r+(Mathf.PI/2)*i)), Random.Range(2f,4f), .05f,
+                                rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/2)*i), Mathf.Cos(r+(Mathf.PI/2)*i))));
+                        }
+                        self.GetComponent<ActionBulletBehavior>().DestroySelf();
+                    }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i].transform.localPosition.y,target_pts[i].transform.localPosition.x)),
+                .25f);
+                int i_two = (i+(bul_num/2)) % (bul_num*4);
                 SpawnActionBullet(act_letter_pool, transform.position, 
-                    new Vector2(-1*(BOUND_X-pad), ((2*(BOUND_Y-pad))/bul_num)*i - (BOUND_Y-pad)), 3f, 
+                    target_pts[i_two].transform.localPosition, .3f, 
                     (self)=>{
-                        self.GetComponent<ActionBulletBehavior>().destination = new Vector2(-1*(BOUND_X-pad),tog*(BOUND_Y-pad));
-                        self.transform.rotation = Quaternion.Euler(0f,0f,90f);
-                        self.GetComponent<ActionBulletBehavior>().at_destination = (self) => {
-                                float r = Random.Range(0f,2f);
-                                for (int i = 0; i < 5; i ++) {
-                                    SpawnStraightBullet(circle_pool, self.transform.position,
-                                        new Vector2(Mathf.Cos(r+(Mathf.PI/4)*i), Mathf.Sin(r+(Mathf.PI/4)*i)), 4f, 0f,
-                                        rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/4)*i), Mathf.Cos(r+(Mathf.PI/4)*i))));
-                                }
-                                self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                            };
-                    }, RADTODEG*(Mathf.Atan2(-1f + ((2*(BOUND_Y-pad))/bul_num)*i - (BOUND_Y-pad),-1*(BOUND_X-pad))));
-                yield return WaitForFixedDuration(0.5f);       
-                tog *= -1;
+                        float r = Random.Range(0f,Mathf.PI);
+                        for (int i = 0; i < 4; i ++) {
+                            SpawnStraightBullet(circle_pool, self.transform.position,
+                                new Vector2(Mathf.Cos(r+(Mathf.PI/2)*i), Mathf.Sin(r+(Mathf.PI/2)*i)), Random.Range(2f,4f), .05f,
+                                rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/2)*i), Mathf.Cos(r+(Mathf.PI/2)*i))));
+                        }
+                        self.GetComponent<ActionBulletBehavior>().DestroySelf();
+                    }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i_two].transform.localPosition.y,target_pts[i_two].transform.localPosition.x)),
+                .25f);
+                yield return WaitForFixedDuration(.2f);
+            }
+            ct += 1;
+            if (ct == 2) {
+                yield return RandomMove();
+                ct = 0;
+                for (int i = 0; i < 24; i ++) {
+                    SpawnActionBullet(act_letter_pool, transform.position, 
+                        target_pts[i].transform.localPosition, 3f, 
+                        (self)=>{
+                            float r = Random.Range(0f,Mathf.PI);
+                            for (int i = 0; i < 4; i ++) {
+                                SpawnStraightBullet(circle_pool, self.transform.position,
+                                    new Vector2(Mathf.Cos(r+(Mathf.PI/2)*i), Mathf.Sin(r+(Mathf.PI/2)*i)), Random.Range(2f,4f), .05f,
+                                    rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/2)*i), Mathf.Cos(r+(Mathf.PI/2)*i))));
+                            }
+                            self.GetComponent<ActionBulletBehavior>().DestroySelf();
+                        }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i].transform.localPosition.y,target_pts[i].transform.localPosition.x)),
+                    .1f);
+                }
+                yield return WaitForFixedDuration(0.15f);
+            }            
+        }
+    }
+
+    IEnumerator Inter2_aux2(GameObject cf) {
+        while (true) {
+            cf.transform.Rotate(0f,0f,0.1f);
+            yield return WaitForFixedDuration(12f);
+            for (int i = 0; i < 9; i ++) {
+                cf.transform.Rotate(0f,0f,5f);
+                yield return new WaitForFixedUpdate();
             }
         }
+    }
+
+    IEnumerator Spell3() {
+        yield return WaitForFixedDuration(1f);
+        health = 2500;
+        maxhealth = 2500;
+        StartCoroutine("MoveTo", new Vector2(0f, 4f));
+        Coroutine aux1 = StartCoroutine("Spell3_aux1");
+        yield return PatternTimer(60f);
+        NextPattern();        
+    }
+
+    IEnumerator Spell3_aux1() {
+        yield return WaitForFixedDuration(1f);
     }
 
     IEnumerator Spell2() {
