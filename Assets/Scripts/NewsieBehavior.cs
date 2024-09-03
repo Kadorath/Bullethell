@@ -164,6 +164,8 @@ public class NewsieBehavior : EnemyBehavior
                         }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i].transform.localPosition.y,target_pts[i].transform.localPosition.x)),
                     .1f);
                 }
+                yield return WaitForFixedDuration(0.1f);
+                camera_frame.GetComponent<SnapshotBehavior>().Indicate();
                 yield return WaitForFixedDuration(0.15f);
             }            
         }
