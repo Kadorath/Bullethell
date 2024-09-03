@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2189642963739639491}
   - component: {fileID: 2189642963739639488}
-  - component: {fileID: 1437529832187740805}
   - component: {fileID: 1625203203003575830}
-  m_Layer: 0
+  - component: {fileID: -4817102708588950289}
+  m_Layer: 7
   m_Name: bul petal
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,18 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1437529832187740805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2189642963739639489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420aea5f1c96d2a458c020a675f09724, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1625203203003575830
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -124,3 +112,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.05, y: 0.11}
   m_EdgeRadius: 0
+--- !u!114 &-4817102708588950289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2189642963739639489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420aea5f1c96d2a458c020a675f09724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  indicate_time: 0
+  spin: 0
+  reserve: 0
+  graze_val: 10
+  grazing: 0
+  dist: -1
+  graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
+  default_color: {r: 1, g: 1, b: 1, a: 1}
+  direction: {x: 0, y: 0}

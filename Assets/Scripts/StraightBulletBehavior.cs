@@ -16,6 +16,7 @@ public class StraightBulletBehavior : BulletBehavior
         }
         else {
             transform.Translate(direction*speed*Time.deltaTime, Space.World);
+            ApplyEffect();
             if (spin) {
                 transform.Rotate(new Vector3(0f,0f,3f));
             }
@@ -28,4 +29,6 @@ public class StraightBulletBehavior : BulletBehavior
             }
         }
     }
+
+    protected virtual void ApplyEffect() {}
 }
