@@ -60,7 +60,8 @@ public class EnemyBehavior : BHEntity
         // Clear all enemy bullets
         GameObject[] all_bullets = GameObject.FindGameObjectsWithTag("Bullet");
         foreach (GameObject bul in all_bullets) {
-            bul.SetActive(false);
+            // TODO: make this accomodate snapshot frame
+            bul.GetComponent<BulletBehavior>().DestroySelf();
         }
         pattern_ind ++; 
         health = -1;
@@ -71,9 +72,9 @@ public class EnemyBehavior : BHEntity
     // I have the x and y params for Atan2 swapped, look into this...
     protected float angleToPlayer(Vector3 a) {
         Vector2 dir = a - player.transform.position;
-        float angle = Mathf.Atan2(dir.x, dir.y) + Mathf.PI/2;
+        float angle = Mathf.Atan2(dir.y, dir.x);
         if (angle < 0) { angle += 2*Mathf.PI; }
-        return angle*-1;
+        return angle;
     }
 
     protected IEnumerator PatternTimer(float duration) {

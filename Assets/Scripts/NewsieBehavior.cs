@@ -29,7 +29,7 @@ public class NewsieBehavior : EnemyBehavior
             bul.GetComponent<SpriteRenderer>().sprite = letter_sprites[r];
         }
         circle_pool = gameManager.CreatePool(bul_circle, 1000);        
-        patterns = new string[] {"Interlude2", "Spell1", "Interlude2", "Spell2"};
+        patterns = new string[] {"Spell3", "Interlude1", "Spell1", "Interlude2", "Spell2"};
     }
 
     IEnumerator Interlude1() {
@@ -192,6 +192,16 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Spell3_aux1() {
         yield return WaitForFixedDuration(1f);
+        while(true) {
+            for (int i = 0; i < 8; i ++) {
+                for (int j = 0; j < 8; j ++) {
+                    SpawnStraightBullet(letter_pool, new Vector2(transform.position.x + ((1f/8)*j - .5f), transform.position.y),
+                        player.transform.position - transform.position, 1f + 0.05f*(i+1), delay:0.25f, 
+                        rotation:RADTODEG*angleToPlayer(transform.position));
+                }
+            }
+            yield return WaitForFixedDuration(2f);
+        }
     }
 
     IEnumerator Spell2() {
@@ -334,8 +344,13 @@ public class NewsieBehavior : EnemyBehavior
             
             if (id == 1) {
                 yield return RandomMove();
+                yield return MoveBullet(camera_frame, frame_speed, player.transform.position, 0f);
             }
-            yield return MoveBullet(camera_frame, frame_speed, player.transform.position, 0f);
+            else {
+                yield return MoveBullet(camera_frame, frame_speed, 
+                    new Vector2(Random.Range(-1*(BOUND_X-2f),BOUND_X-2f),Random.Range(-1*(BOUND_Y-2f),BOUND_Y-2f)), 
+                    0f);
+            }
         }
     }
 }
