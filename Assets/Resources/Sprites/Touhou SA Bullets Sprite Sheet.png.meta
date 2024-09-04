@@ -155,7 +155,7 @@ TextureImporter:
         width: 10
         height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,6 +163,27 @@ TextureImporter:
       bones: []
       spriteID: 73d7bbe4971f6c047ae9881a76de41b3
       internalID: -1138030930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamond_pink
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 710
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecff433eb2b3ff84b82049126825e4dc
+      internalID: 1705622924
       vertices: []
       indices: 
       edges: []
@@ -180,6 +201,7 @@ TextureImporter:
     nameFileIdTable:
       Touhou SA Hammer Sm: -1966665737
       Touhou SA Yellow Ball Sm: 884106936
+      diamond_pink: 1705622924
       soul: -1138030930
   spritePackingTag: 
   pSDRemoveMatte: 0
