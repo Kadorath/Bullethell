@@ -29,7 +29,7 @@ public class NewsieBehavior : EnemyBehavior
             bul.GetComponent<SpriteRenderer>().sprite = letter_sprites[r];
         }
         circle_pool = gameManager.CreatePool(bul_circle, 1000);        
-        patterns = new string[] {"Spell3", "Interlude1", "Spell1", "Interlude2", "Spell2"};
+        patterns = new string[] {"Interlude2", "Interlude1", "Spell1", "Interlude2", "Spell2"};
     }
 
     IEnumerator Interlude1() {
