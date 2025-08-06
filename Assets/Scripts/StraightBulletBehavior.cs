@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StraightBulletBehavior : BulletBehavior
@@ -19,13 +17,6 @@ public class StraightBulletBehavior : BulletBehavior
             ApplyEffect();
             if (spin) {
                 transform.Rotate(new Vector3(0f,0f,3f));
-            }
-
-            if(grazing) {
-                GetComponent<SpriteRenderer>().color = graze_color;
-            }
-            else {
-                GetComponent<SpriteRenderer>().color = default_color;
             }
         }
     }

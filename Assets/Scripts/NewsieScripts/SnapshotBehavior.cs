@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SnapshotBehavior : MonoBehaviour
+public class SnapshotBehavior : BulletBehavior
 {
     public Collider2D[] captured_frame;
     public Vector2[] captured_pos;
@@ -43,7 +41,7 @@ public class SnapshotBehavior : MonoBehaviour
 
     void FixedUpdate() {
         if (flash.color.a >= 0f) {
-            flash.color = new Color(1f,1f,1f,flash.color.a-0.1f);
+            flash.color = new Color(1f,1f,1f,flash.color.a-0.075f);
         }
 
         if (lock_player) {

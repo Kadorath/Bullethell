@@ -9,7 +9,7 @@ public class EnemyBehavior : BHEntity
     [SerializeField] protected int health = 25000;
     protected int maxhealth = 25000;
     protected bool transition = false;
-    protected string[] patterns;
+    [SerializeField] protected string[] patterns;
     protected Coroutine cur_pattern;
     protected int pattern_ind = 0;
 
@@ -71,7 +71,7 @@ public class EnemyBehavior : BHEntity
 
     // I have the x and y params for Atan2 swapped, look into this...
     protected float angleToPlayer(Vector3 a) {
-        Vector2 dir = a - player.transform.position;
+        Vector2 dir = player.transform.position - a;
         float angle = Mathf.Atan2(dir.y, dir.x);
         if (angle < 0) { angle += 2*Mathf.PI; }
         return angle;

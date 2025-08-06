@@ -21,21 +21,20 @@ public class NewsieBehavior : EnemyBehavior
         act_letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets_orange");        
         foreach (GameObject bul in act_letter_pool) {
             int r = Random.Range(0,28);
-            bul.GetComponent<SpriteRenderer>().sprite = act_letter_sprites[r];
+            bul.GetComponentInChildren<SpriteRenderer>().sprite = act_letter_sprites[r];
         }
         letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets");
         foreach (GameObject bul in letter_pool) {
             int r = Random.Range(0,28);
-            bul.GetComponent<SpriteRenderer>().sprite = letter_sprites[r];
+            bul.GetComponentInChildren<SpriteRenderer>().sprite = letter_sprites[r];
         }
         circle_pool = gameManager.CreatePool(bul_circle, 1000);        
-        patterns = new string[] {"Interlude2", "Interlude1", "Spell1", "Interlude2", "Spell2"};
     }
 
     IEnumerator Interlude1() {
         yield return WaitForFixedDuration(2f);
-        health = 2500;
-        maxhealth = 2500;
+        health = 5000;
+        maxhealth = 5000;
         Coroutine aux1 = StartCoroutine("Inter1_aux1");
         yield return PatternTimer(60f);
         NextPattern();
@@ -76,8 +75,8 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Interlude2() {
         yield return WaitForFixedDuration(1f);
-        health = 2500;
-        maxhealth = 2500;
+        health = 5000;
+        maxhealth = 5000;
         StartCoroutine("MoveTo", new Vector2(0f, 2f));
         Coroutine aux1 = StartCoroutine("Inter2_aux1");
         yield return PatternTimer(60f);
@@ -85,14 +84,14 @@ public class NewsieBehavior : EnemyBehavior
     }
 
     IEnumerator Inter2_aux1() {
-        yield return WaitForFixedDuration(2f);
+        yield return WaitForFixedDuration(1f);
         GameObject camera_frame = Instantiate(snapshot, new Vector3(0f,2f), Quaternion.identity);
         camera_frame.transform.SetParent(transform);
         foreach (GameObject bul in act_letter_pool) {
             bul.transform.SetParent(camera_frame.transform, true);
         }
         float frame_size = 1f;
-        yield return MoveBullet(camera_frame, 8f, new Vector3(0f,1.5f,-1f), 0f, new Vector2(frame_size,frame_size));
+        yield return MoveBullet(camera_frame, 10f, new Vector3(0f,1.5f,-1f), 0f, new Vector2(frame_size,frame_size));
         StartCoroutine("Inter2_aux2", camera_frame);
         int bul_num = 6;
 
@@ -144,7 +143,7 @@ public class NewsieBehavior : EnemyBehavior
                         self.GetComponent<ActionBulletBehavior>().DestroySelf();
                     }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i_two].transform.localPosition.y,target_pts[i_two].transform.localPosition.x)),
                 .25f);
-                yield return WaitForFixedDuration(.2f);
+                yield return WaitForFixedDuration(.1f);
             }
             ct += 1;
             if (ct == 2) {
@@ -164,9 +163,9 @@ public class NewsieBehavior : EnemyBehavior
                         }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i].transform.localPosition.y,target_pts[i].transform.localPosition.x)),
                     .1f);
                 }
-                yield return WaitForFixedDuration(0.1f);
+                yield return WaitForFixedDuration(0.05f);
                 camera_frame.GetComponent<SnapshotBehavior>().Indicate();
-                yield return WaitForFixedDuration(0.15f);
+                yield return WaitForFixedDuration(0.075f);
             }            
         }
     }
@@ -174,7 +173,7 @@ public class NewsieBehavior : EnemyBehavior
     IEnumerator Inter2_aux2(GameObject cf) {
         while (true) {
             cf.transform.Rotate(0f,0f,0.1f);
-            yield return WaitForFixedDuration(12f);
+            yield return WaitForFixedDuration(6f);
             for (int i = 0; i < 9; i ++) {
                 cf.transform.Rotate(0f,0f,5f);
                 yield return new WaitForFixedUpdate();
@@ -184,8 +183,8 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Spell3() {
         yield return WaitForFixedDuration(1f);
-        health = 2500;
-        maxhealth = 2500;
+        health = 10000;
+        maxhealth = 10000;
         StartCoroutine("MoveTo", new Vector2(0f, 4f));
         Coroutine aux1 = StartCoroutine("Spell3_aux1");
         yield return PatternTimer(60f);
@@ -208,8 +207,8 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Spell2() {
         yield return WaitForFixedDuration(1f);
-        health = 2500;
-        maxhealth = 2500;
+        health = 10000;
+        maxhealth = 10000;
         StartCoroutine("MoveTo", new Vector2(0f, 4f));
         Coroutine aux1 = StartCoroutine("Spell2_aux1");
         Coroutine aux2 = StartCoroutine("Spell2_aux2");
@@ -273,8 +272,8 @@ public class NewsieBehavior : EnemyBehavior
     }
 
     IEnumerator Spell1() {
-        health = 2500;
-        maxhealth = 2500;
+        health = 10000;
+        maxhealth = 10000;
         StartCoroutine("MoveTo", new Vector2(0f, 3f));
         Coroutine aux1 = StartCoroutine("Spell1_aux1");
         Coroutine aux2 = StartCoroutine("Spell1_aux2", 1);
@@ -311,19 +310,19 @@ public class NewsieBehavior : EnemyBehavior
 
         GameObject camera_frame = Instantiate(snapshot, transform.position, Quaternion.identity);
         SnapshotBehavior cf_behavior = camera_frame.GetComponent<SnapshotBehavior>();
-        float frame_speed = 7f;
+        float frame_speed = 4f;
         Collider2D[] captured_bullets;
 
         yield return MoveBullet(camera_frame, frame_speed, player.transform.position, 0f, new Vector2(2f,2f));
 
         int ct = 0;
         while (true) {
-            yield return WaitForFixedDuration(2f);
+            yield return WaitForFixedDuration(1f);
             captured_bullets = cf_behavior.Snapshot();
 
             cf_behavior.FreezeFrame();
 
-            yield return WaitForFixedDuration(0.5f);
+            yield return WaitForFixedDuration(0.25f);
 
             ct ++;
             if (ct == 3 && id == 1) {
@@ -338,7 +337,7 @@ public class NewsieBehavior : EnemyBehavior
             float target_angle = RADTODEG*angleToPlayer(target_pos);
             yield return MoveBullet(camera_frame, frame_speed, target_pos, target_angle);
 
-            yield return WaitForFixedDuration(0.25f);
+            yield return WaitForFixedDuration(0.15f);
 
             cf_behavior.UnfreezeFrame();
 
