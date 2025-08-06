@@ -115,33 +115,40 @@ public class NewsieBehavior : EnemyBehavior
             target_pts[i] = target_pt;
         }
 
+        StartCoroutine("Inter2_aux3", camera_frame);
+
         int ct = 0;
         while (true) {
-            for (int i = 0; i < bul_num*4; i ++) {
-                SpawnActionBullet(act_letter_pool, transform.position, 
-                    target_pts[i].transform.localPosition, .3f, 
-                    (self)=>{
-                        float r = Random.Range(0f,Mathf.PI);
-                        for (int i = 0; i < 4; i ++) {
+            for (int i = 0; i < bul_num * 4; i++)
+            {
+                SpawnActionBullet(act_letter_pool, transform.position,
+                    target_pts[i].transform.localPosition, .3f,
+                    (self) =>
+                    {
+                        float r = Random.Range(0f, Mathf.PI);
+                        for (int i = 0; i < 4; i++)
+                        {
                             SpawnStraightBullet(circle_pool, self.transform.position,
-                                new Vector2(Mathf.Cos(r+(Mathf.PI/2)*i), Mathf.Sin(r+(Mathf.PI/2)*i)), Random.Range(2f,4f), .05f,
-                                rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/2)*i), Mathf.Cos(r+(Mathf.PI/2)*i))));
+                                new Vector2(Mathf.Cos(r + (Mathf.PI / 2) * i), Mathf.Sin(r + (Mathf.PI / 2) * i)), Random.Range(2f, 4f), .05f,
+                                rotation: -90f + RADTODEG * (Mathf.Atan2(Mathf.Sin(r + (Mathf.PI / 2) * i), Mathf.Cos(r + (Mathf.PI / 2) * i))));
                         }
                         self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                    }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i].transform.localPosition.y,target_pts[i].transform.localPosition.x)),
+                    }, camera_frame.transform.eulerAngles.z + RADTODEG * (Mathf.Atan2(target_pts[i].transform.localPosition.y, target_pts[i].transform.localPosition.x)),
                 .25f);
-                int i_two = (i+(bul_num/2)) % (bul_num*4);
-                SpawnActionBullet(act_letter_pool, transform.position, 
-                    target_pts[i_two].transform.localPosition, .3f, 
-                    (self)=>{
-                        float r = Random.Range(0f,Mathf.PI);
-                        for (int i = 0; i < 4; i ++) {
+                int i_two = (i + (bul_num / 2)) % (bul_num * 4);
+                SpawnActionBullet(act_letter_pool, transform.position,
+                    target_pts[i_two].transform.localPosition, .3f,
+                    (self) =>
+                    {
+                        float r = Random.Range(0f, Mathf.PI);
+                        for (int i = 0; i < 4; i++)
+                        {
                             SpawnStraightBullet(circle_pool, self.transform.position,
-                                new Vector2(Mathf.Cos(r+(Mathf.PI/2)*i), Mathf.Sin(r+(Mathf.PI/2)*i)), Random.Range(2f,4f), .05f,
-                                rotation:-90f+RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/2)*i), Mathf.Cos(r+(Mathf.PI/2)*i))));
+                                new Vector2(Mathf.Cos(r + (Mathf.PI / 2) * i), Mathf.Sin(r + (Mathf.PI / 2) * i)), Random.Range(2f, 4f), .05f,
+                                rotation: -90f + RADTODEG * (Mathf.Atan2(Mathf.Sin(r + (Mathf.PI / 2) * i), Mathf.Cos(r + (Mathf.PI / 2) * i))));
                         }
                         self.GetComponent<ActionBulletBehavior>().DestroySelf();
-                    }, camera_frame.transform.eulerAngles.z + RADTODEG*(Mathf.Atan2(target_pts[i_two].transform.localPosition.y,target_pts[i_two].transform.localPosition.x)),
+                    }, camera_frame.transform.eulerAngles.z + RADTODEG * (Mathf.Atan2(target_pts[i_two].transform.localPosition.y, target_pts[i_two].transform.localPosition.x)),
                 .25f);
                 yield return WaitForFixedDuration(.1f);
             }
@@ -181,11 +188,29 @@ public class NewsieBehavior : EnemyBehavior
         }
     }
 
+    IEnumerator Inter2_aux3(GameObject cf)
+    {
+        float frame_grow_speed = 0.02f;
+        while (true)
+        {
+            Vector3 s = cf.transform.localScale;
+            float grow_delta = frame_grow_speed * Time.fixedDeltaTime;
+            cf.transform.localScale = new Vector3(s.x + grow_delta, s.y + grow_delta, s.z);
+
+            foreach (Transform child in cf.transform)
+            {
+                if (child.CompareTag("Bullet") && child.GetComponent<BulletBehavior>().IsSpawned())
+                    child.localScale = new Vector3(1f / cf.transform.localScale.x, 1f / cf.transform.localScale.y, child.localScale.z);
+            }
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
     IEnumerator Spell3() {
         yield return WaitForFixedDuration(1f);
-        health = 10000;
-        maxhealth = 10000;
-        StartCoroutine("MoveTo", new Vector2(0f, 4f));
+        health = 5000;
+        maxhealth = 5000;
+        StartCoroutine("MoveTo", new Vector2(0f, 0.1f));
         Coroutine aux1 = StartCoroutine("Spell3_aux1");
         yield return PatternTimer(60f);
         NextPattern();        
@@ -193,22 +218,19 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Spell3_aux1() {
         yield return WaitForFixedDuration(1f);
-        while(true) {
-            for (int i = 0; i < 8; i ++) {
-                for (int j = 0; j < 8; j ++) {
-                    SpawnStraightBullet(letter_pool, new Vector2(transform.position.x + ((1f/8)*j - .5f), transform.position.y),
-                        player.transform.position - transform.position, 1f + 0.05f*(i+1), delay:0.25f, 
-                        rotation:RADTODEG*angleToPlayer(transform.position));
-                }
-            }
-            yield return WaitForFixedDuration(2f);
+        GameObject camera_frame = Instantiate(snapshot, new Vector3(0f,0.1f), Quaternion.identity);
+        camera_frame.transform.SetParent(transform);
+        foreach (GameObject bul in act_letter_pool) {
+            bul.transform.SetParent(camera_frame.transform, true);
         }
+        float frame_size = 1.8f;
+        yield return MoveBullet(camera_frame, 3f, new Vector3(0f,0f,-1f), 0f, new Vector2(frame_size,frame_size));
     }
 
     IEnumerator Spell2() {
         yield return WaitForFixedDuration(1f);
-        health = 10000;
-        maxhealth = 10000;
+        health = 5000;
+        maxhealth = 5000;
         StartCoroutine("MoveTo", new Vector2(0f, 4f));
         Coroutine aux1 = StartCoroutine("Spell2_aux1");
         Coroutine aux2 = StartCoroutine("Spell2_aux2");
@@ -272,8 +294,8 @@ public class NewsieBehavior : EnemyBehavior
     }
 
     IEnumerator Spell1() {
-        health = 10000;
-        maxhealth = 10000;
+        health = 5000;
+        maxhealth = 5000;
         StartCoroutine("MoveTo", new Vector2(0f, 3f));
         Coroutine aux1 = StartCoroutine("Spell1_aux1");
         Coroutine aux2 = StartCoroutine("Spell1_aux2", 1);

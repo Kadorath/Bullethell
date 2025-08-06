@@ -112,8 +112,8 @@ public class SnapshotBehavior : BulletBehavior
 
     public void FreezeFrame() {
         foreach (Collider2D bul in captured_frame) {
-            bul.gameObject.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Background");
-            bul.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Background");
+            bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
             bul.gameObject.GetComponent<BulletBehavior>().speed = 0f;
             bul.gameObject.GetComponent<BulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
             bul.gameObject.GetComponent<BulletBehavior>().ResetGraze();
@@ -124,7 +124,7 @@ public class SnapshotBehavior : BulletBehavior
 
     public void UnfreezeFrame() {
         foreach (Collider2D bul in captured_frame) {
-            bul.gameObject.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Bullets");
+            bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Bullets");
             StraightBulletBehavior bul_script = bul.gameObject.GetComponent<StraightBulletBehavior>();
             bul_script.default_color = new Color(1f, 1f, 1f, 1f);    
             bul_script.direction = Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * bul_script.direction;

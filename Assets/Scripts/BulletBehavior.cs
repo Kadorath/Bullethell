@@ -38,13 +38,17 @@ public class BulletBehavior : MonoBehaviour
         delay_time = indicate_time;
     }
 
-    public void Graze(Transform player) {
-        if (!can_graze) { return; }
+    public bool IsSpawned() { return delay_time <= 0f; }
+
+    public bool Graze(Transform player)
+    {
+        if (!can_graze) { return false; }
 
         grazing = true;
         default_color = rend.color;
         rend.color = graze_color;
         StartCoroutine("Grazing", player);
+        return true;
     }
 
     IEnumerator Grazing(Transform player)
@@ -69,6 +73,7 @@ public class BulletBehavior : MonoBehaviour
     }
 
     public void ResetGraze() {
+        if (!can_graze) { return; }
         rend.color = default_color;
         rend.transform.localPosition = Vector3.zero;
         graze_val = 10f;

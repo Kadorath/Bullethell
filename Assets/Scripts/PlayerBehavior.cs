@@ -14,12 +14,19 @@ public class PlayerBehavior : BHEntity
     [SerializeField] private float move_speed_slow = 2f;
     private float move_speed;
     [SerializeField] private int fire_rate = 1;
-    [SerializeField] private int fire_ct = 0;
+    private int fire_ct = 0;
+    private int fire_sfx_ct = 0;
+    [SerializeField] private GameObject[] hardpoints;
 
+    [Header("Audio Clips")]
+    [SerializeField] AudioClip grazeSFX;
+    [SerializeField] AudioClip shootSFX;
+
+    [Header("Other Refs")]
     public GameObject bul_player;
     private GameObject[] my_pool;
     [SerializeField] private ParticleSystem death_ps;
-    [SerializeField] private GameObject[] hardpoints;
+
 
     void Start()
     {
@@ -59,16 +66,24 @@ public class PlayerBehavior : BHEntity
             transform.position.z);
 
         // player firing
-        if (Input.GetAxis("Fire") > 0.05f) {
-            if (fire_ct == 0) { 
-                for (int i = 0; i < hardpoints.Length; i ++) {
-                    SpawnStraightBullet(my_pool, 
+        if (Input.GetAxis("Fire") > 0.05f)
+        {
+            if (fire_ct == 0)
+            {
+                for (int i = 0; i < hardpoints.Length; i++)
+                {
+                    SpawnStraightBullet(my_pool,
                         hardpoints[i].transform.position,
                         Vector2.up, 22f);
                 }
+
+                if (fire_sfx_ct == 0)
+                    SoundManager.Instance.PlayOneShot(shootSFX, 0.35f);
             }
-            fire_ct ++;
+            fire_ct++;
+            fire_sfx_ct++;
             if (fire_ct == fire_rate) { fire_ct = 0; }
+            if (fire_sfx_ct == fire_rate*4 + 1) { fire_sfx_ct = 0; }
         }
     }
 
@@ -98,8 +113,10 @@ public class PlayerBehavior : BHEntity
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Bullet")) {
-            if (other.gameObject.GetComponent<BulletBehavior>().graze_val > 0f) {
-                other.gameObject.GetComponent<BulletBehavior>().Graze(gameObject.transform);
+            if (other.gameObject.GetComponent<BulletBehavior>().graze_val > 0f)
+            {
+                if (other.gameObject.GetComponent<BulletBehavior>().Graze(gameObject.transform))
+                    SoundManager.Instance.PlayOneShot(grazeSFX);
             }
         }
     } 
