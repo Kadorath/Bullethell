@@ -5561,10 +5561,11 @@ MonoBehaviour:
   move_speed_fast: 5
   move_speed_slow: 2
   fire_rate: 1
-  fire_ct: 0
+  invulnerable: 0
+  grazeSFX: {fileID: 8300000, guid: 3b73daf7e818263469d5f5478436de79, type: 3}
+  shootSFX: {fileID: 8300000, guid: 4ddba9bb0559ede47aca78c5ea8cc024, type: 3}
   bul_player: {fileID: 2450368829492190457, guid: 6dba2588226609c459954d127571ac28, type: 3}
   death_ps: {fileID: 0}
-  hardpoints: []
 --- !u!114 &4506212153340114739
 MonoBehaviour:
   m_ObjectHideFlags: 0

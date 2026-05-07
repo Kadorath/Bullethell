@@ -16,7 +16,7 @@ public class BulletBehavior : MonoBehaviour
     public float graze_val = 10f;
     public bool grazing = false;
     public float dist = -1f;
-    private SpriteRenderer rend;
+    protected SpriteRenderer rend;
     public Color graze_color = new Color(1f, .75f, .75f, 1f);
     public Color default_color = new Color(1f, 1f, 1f, 1f);
 
@@ -25,7 +25,7 @@ public class BulletBehavior : MonoBehaviour
         rend = GetComponentInChildren<SpriteRenderer>();
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (!reserve && (Mathf.Abs(transform.position.x) > 20f || Mathf.Abs(transform.position.y) > 20f))
             DestroySelf();

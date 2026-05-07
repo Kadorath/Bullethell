@@ -20,12 +20,16 @@ public class EnemyBehavior : BHEntity
 
     public GameObject player;
     
-    protected GameManagerBehavior gameManager;
+    protected GameManager gameManager;
+
+    [Header("Audio Clips")]
+    [SerializeField] protected AudioClip spellFire1SFX;
+    [SerializeField] protected AudioClip spellFire2SFX;
 
     void Start()
     {
         player = GameObject.Find("Player");
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManagerBehavior>();
+        gameManager = GameManager.Instance;
 
         healthbar = GameObject.Find("EnemyHealthbar").GetComponent<Image>();
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
@@ -46,9 +50,11 @@ public class EnemyBehavior : BHEntity
             cur_pattern = StartCoroutine(patterns[pattern_ind]);
         }
 
+        // Player bullet collision detection
         collided_bul = Physics2D.OverlapBoxAll(transform.position, new Vector2(2f, 2f), 0f, LayerMask.GetMask("PlayerBullets"));
         foreach (Collider2D bul in collided_bul) {
             bul.gameObject.SetActive(false);
+            gameManager.AddScore(10);
             if (health > 0) { health -= 1; }
         }
         if (health == 0) {
@@ -63,6 +69,7 @@ public class EnemyBehavior : BHEntity
             // TODO: make this accomodate snapshot frame
             bul.GetComponent<BulletBehavior>().DestroySelf();
         }
+
         pattern_ind ++; 
         health = -1;
         StopAllCoroutines();

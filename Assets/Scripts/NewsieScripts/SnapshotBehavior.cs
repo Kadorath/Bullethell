@@ -32,24 +32,24 @@ public class SnapshotBehavior : BulletBehavior
 
         flash = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         my_camera = transform.GetChild(1).gameObject.GetComponent<Camera>();
-        my_tex = new RenderTexture(256,256,16,RenderTextureFormat.ARGB32);
+        my_tex = new RenderTexture(1024,1024,16,RenderTextureFormat.ARGB32);
         my_camera.targetTexture = my_tex;
         // This feels like a bandaid solution. Feels like it shouldn't be necessary
         my_tex.Release();
         image_frame.GetComponent<RawImage>().texture = my_tex;
     }
 
-    void FixedUpdate() {
+    protected override void FixedUpdate() {
         if (flash.color.a >= 0f) {
             flash.color = new Color(1f,1f,1f,flash.color.a-0.075f);
         }
 
         if (lock_player) {
             float padding = 0.25f;
-            x1 = transform.position.x-transform.localScale.x + padding;
-            y1 = transform.position.y-transform.localScale.y + padding;
-            x2 = transform.position.x+transform.localScale.x - padding;
-            y2 = transform.position.y+transform.localScale.y - padding;
+            x1 = transform.position.x-Mathf.Abs(transform.localScale.x) + padding;
+            y1 = transform.position.y-Mathf.Abs(transform.localScale.y) + padding;
+            x2 = transform.position.x+Mathf.Abs(transform.localScale.x)- padding;
+            y2 = transform.position.y+Mathf.Abs(transform.localScale.y) - padding;
             player.transform.position = 
                 new Vector3(Mathf.Clamp(player.transform.position.x,x1,x2),
                             Mathf.Clamp(player.transform.position.y,y1,y2),
@@ -58,31 +58,47 @@ public class SnapshotBehavior : BulletBehavior
     }
 
     public void Indicate() {
-        flash.color = new Color(1f,1f,1f,1f);
+        flash.color = new Color(1f,1f,1f,0.5f);
     }
 
-    public Collider2D[] Snapshot() {
+    public void SnapshotImageOnly()
+    {
+        my_camera.orthographicSize = Mathf.Abs(Mathf.Abs(transform.localScale.x));
+        my_camera.Render();
+    }
+
+    public void ClearImage()
+    {
+        my_camera.targetTexture.Release();
+    }
+
+    public Collider2D[] Snapshot()
+    {
+        my_camera.orthographicSize = Mathf.Abs(Mathf.Abs(transform.localScale.x));
         my_camera.Render();
         frame.GetPositions(frame_points);
-        float padding = 0.2f+frame.widthMultiplier;
+        float padding = 0.2f + frame.widthMultiplier;
         captured_frame = Physics2D.OverlapAreaAll(
-            new Vector2(transform.localScale.x*frame_points[0].x + transform.position.x + padding,
-                transform.localScale.y*frame_points[0].y + transform.position.y - padding),
-            new Vector2(transform.localScale.x*frame_points[2].x + transform.position.x - padding,
-                transform.localScale.y*frame_points[2].y + transform.position.y + padding),
+            new Vector2(transform.localScale.x * frame_points[0].x + transform.position.x + padding,
+                transform.localScale.y * frame_points[0].y + transform.position.y - padding),
+            new Vector2(transform.localScale.x * frame_points[2].x + transform.position.x - padding,
+                transform.localScale.y * frame_points[2].y + transform.position.y + padding),
             LayerMask.GetMask("EnemyBullets")
         );
-        foreach (Collider2D bul in captured_frame) {
+        foreach (Collider2D bul in captured_frame)
+        {
             bul.gameObject.GetComponent<BulletBehavior>().reserve = true;
         }
-        if (lock_player) {
+        if (lock_player)
+        {
             captured_pos = new Vector2[captured_frame.Length];
-            for (int i = 0; i < captured_frame.Length; i ++) {
+            for (int i = 0; i < captured_frame.Length; i++)
+            {
                 captured_pos[i] = captured_frame[i].transform.position;
             }
             captured_player_pos = player.transform.position;
         }
-        flash.color = new Color(1f,1f,1f,1f);
+        flash.color = new Color(1f, 1f, 1f, 1f);
         return captured_frame;
     }
 

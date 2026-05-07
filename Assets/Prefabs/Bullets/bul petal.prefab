@@ -95,7 +95,7 @@ MonoBehaviour:
   speed: 0
   indicate_time: 0
   spin: 0
-  reserve: 0
+  reserve: 1
   can_graze: 1
   graze_val: 10
   grazing: 0
@@ -103,6 +103,9 @@ MonoBehaviour:
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
   direction: {x: 0, y: 0}
+  wind_force: {x: 0, y: 0}
+  petalSpr: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  rainSpr: {fileID: -306942007, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
 --- !u!1 &5718873070214074793
 GameObject:
   m_ObjectHideFlags: 0

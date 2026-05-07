@@ -37,12 +37,26 @@ public class BHEntity : MonoBehaviour
         return bul;
     }
 
-    protected GameObject SpawnLaser(GameObject l, Vector2 start, Vector2 target, float width=.3f, 
-        float delay=1f, float lifetime=1f, GameObject source=null, bool destroy_source=false) 
+    protected GameObject SpawnStraightBullet(GameObject obj, Vector2 pos, Vector2 dir,
+        float speed, float delay = 0f, bool spin = false, float rotation = 0f)
+    {
+        GameObject bul = Instantiate(obj);
+        bul.GetComponent<StraightBulletBehavior>().speed = speed;
+        bul.GetComponent<StraightBulletBehavior>().direction = dir;
+        bul.GetComponent<StraightBulletBehavior>().spin = spin;
+        bul.GetComponent<BulletBehavior>().indicate_time = delay;
+        bul.transform.position = pos;
+        bul.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+        bul.GetComponent<BulletBehavior>().Spawn();
+        return bul;
+    }
+
+    protected GameObject SpawnLaser(GameObject l, Vector2 start, Vector2 target, float width = .3f,
+        float delay = 1f, float lifetime = 1f, GameObject source = null, bool destroy_source = false)
     {
         GameObject laser = Instantiate(l, start, Quaternion.identity);
         LaserBehavior l_script = laser.GetComponent<LaserBehavior>();
-        laser.GetComponent<LineRenderer>().SetPositions(new Vector3[] {start, target});
+        laser.GetComponent<LineRenderer>().SetPositions(new Vector3[] { start, target });
         l_script.delay = delay;
         l_script.width = width;
         l_script.lifetime = lifetime;

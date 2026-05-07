@@ -8,13 +8,17 @@ public class SoulBehavior : MonoBehaviour
 
     void FixedUpdate() {
         // TODO: Check radius and adjust layers checked
-        collided_bul = Physics2D.OverlapCircle(
-            transform.position, 
-            0.03f, 
-            LayerMask.GetMask("EnemyBullets", "Enemy")
-        );
-        if (collided_bul) {
-            transform.parent.GetComponent<PlayerBehavior>().PlayerDie();
+        if (!transform.parent.GetComponent<PlayerBehavior>().invulnerable)
+        {
+            collided_bul = Physics2D.OverlapCircle(
+                transform.position,
+                0.03f,
+                LayerMask.GetMask("EnemyBullets", "Enemy")
+            );
+            if (collided_bul)
+            {
+                transform.parent.GetComponent<PlayerBehavior>().PlayerDie();
+            }
         }
     }
 

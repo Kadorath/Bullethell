@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 public class NewsieBehavior : EnemyBehavior
 {
+    [Header("Bullet Config")]
     public GameObject bul_letter;
     public GameObject bul_act_letter;
     public GameObject bul_circle;
@@ -30,8 +34,9 @@ public class NewsieBehavior : EnemyBehavior
         }
         circle_pool = gameManager.CreatePool(bul_circle, 1000);        
     }
-
-    IEnumerator Interlude1() {
+    
+    // Interlude 1
+    public IEnumerator Interlude1() {
         yield return WaitForFixedDuration(2f);
         health = 5000;
         maxhealth = 5000;
@@ -72,8 +77,9 @@ public class NewsieBehavior : EnemyBehavior
             yield return RandomMove();
         }
     }
-
-    IEnumerator Interlude2() {
+    
+    // Interlude 2
+    public IEnumerator Interlude2() {
         yield return WaitForFixedDuration(1f);
         health = 5000;
         maxhealth = 5000;
@@ -190,7 +196,7 @@ public class NewsieBehavior : EnemyBehavior
 
     IEnumerator Inter2_aux3(GameObject cf)
     {
-        float frame_grow_speed = 0.02f;
+        float frame_grow_speed = 0.025f;
         while (true)
         {
             Vector3 s = cf.transform.localScale;
@@ -206,7 +212,68 @@ public class NewsieBehavior : EnemyBehavior
         }
     }
 
-    IEnumerator Spell3() {
+    Vector2 RotateVector(Vector2 v, float angle)
+    {
+        float rad = angle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+    }
+
+    // Interlude 3
+    public IEnumerator Interlude3()
+    {
+        yield return WaitForFixedDuration(1f);
+        health = 5000;
+        maxhealth = 5000;
+        StartCoroutine("MoveTo", new Vector2(0f, 2f));
+        Coroutine aux1 = StartCoroutine("Inter3_aux1");
+        yield return PatternTimer(60f);
+        NextPattern();
+    }
+
+    public IEnumerator Inter3_aux1()
+    {
+        yield return WaitForFixedDuration(1f);
+
+        while (true)
+        {
+            float r = Random.Range(0f, 180f);
+            // number of bullets per square side
+            int bul_num = 18;
+            SoundManager.Instance.PlayOneShot(spellFire1SFX, 0.65f);
+            for (int i = 0; i < bul_num; i ++)
+            {
+                float squareOffset = Mathf.Lerp(1f, -1f, i/(bul_num-1f));
+                for (int side = 0; side < 4; side ++) {
+                    Vector2 direction = new Vector2(side%2==0 ? squareOffset : (side < 2 ? 1f : -1f), side%2!=0 ? squareOffset : (side < 2 ? 1f : -1f)).normalized;
+                    direction = RotateVector(direction, r);
+                    float baseSpeed = 2.5f;
+                    float speed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
+                    SpawnStraightBullet(circle_pool, transform.position, direction, speed, 0.15f, rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            float r2 = Random.Range(12f, 38f);
+            bul_num = 9;
+            SoundManager.Instance.PlayOneShot(spellFire1SFX, 0.65f);
+            for (int i = 0; i < bul_num; i ++)
+            {
+                float squareOffset = Mathf.Lerp(1f, -1f, i/(bul_num-1f));
+                for (int side = 0; side < 4; side ++) {
+                    Vector2 direction = new Vector2(side%2==0 ? squareOffset : (side < 2 ? 1f : -1f), side%2!=0 ? squareOffset : (side < 2 ? 1f : -1f)).normalized;
+                    direction = RotateVector(direction, r+r2);
+                    float baseSpeed = 4f;
+                    float speed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
+                    SpawnStraightBullet(circle_pool, transform.position, direction, speed, 0.15f, rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+                }
+            }
+            yield return new WaitForSeconds(8f);
+        }
+    }
+
+    public IEnumerator Spell3() {
         yield return WaitForFixedDuration(1f);
         health = 5000;
         maxhealth = 5000;
@@ -216,15 +283,68 @@ public class NewsieBehavior : EnemyBehavior
         NextPattern();        
     }
 
-    IEnumerator Spell3_aux1() {
+    IEnumerator Spell3_aux1()
+    {
         yield return WaitForFixedDuration(1f);
-        GameObject camera_frame = Instantiate(snapshot, new Vector3(0f,0.1f), Quaternion.identity);
-        camera_frame.transform.SetParent(transform);
-        foreach (GameObject bul in act_letter_pool) {
-            bul.transform.SetParent(camera_frame.transform, true);
+        GameObject camera_frame = Instantiate(snapshot, new Vector3(0f, 0.1f), Quaternion.identity);
+        GameObject poolHolder = new GameObject("Bullet Pool");
+        poolHolder.transform.SetParent(camera_frame.transform);
+        foreach (GameObject bul in act_letter_pool)
+        {
+            bul.transform.SetParent(poolHolder.transform, true);
         }
-        float frame_size = 1.8f;
-        yield return MoveBullet(camera_frame, 3f, new Vector3(0f,0f,-1f), 0f, new Vector2(frame_size,frame_size));
+        float frame_size = 4.8f;
+        yield return MoveBullet(camera_frame, 3f, new Vector3(0f, 0f, -1f), 0f, new Vector2(frame_size, frame_size));
+        camera_frame.GetComponent<SnapshotBehavior>().lock_player = true;
+        player.transform.SetParent(camera_frame.transform);
+        transform.SetParent(camera_frame.transform);
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine("Spell3_aux2", camera_frame);
+    }
+
+    // Snapshot Frame reflection
+    IEnumerator Spell3_aux2(GameObject cf)
+    {
+        float frame_flip_time = 12f;
+        while (true)
+        {
+            // Flip the frame
+            cf.GetComponent<SnapshotBehavior>().SnapshotImageOnly();
+            yield return new WaitForSeconds(0.5f);
+            Vector3 s = cf.transform.localScale;
+            float targetDim = -s.x;
+            cf.GetComponent<SnapshotBehavior>().lock_player = false;
+            player.GetComponent<PlayerBehavior>().invulnerable = true;
+            // I don't know why this is necessary. Something is setting the Player's
+            // local position to Vector3.zero on the inflection point (localScale of 0
+            // destroys local position information, perhaps?)
+            Vector3 original_pos = player.transform.localPosition;
+            for (int i = 1; i <= frame_flip_time; i++)
+            {
+                cf.transform.localScale = new Vector3(Mathf.Lerp(s.x, targetDim, i / frame_flip_time), s.y, s.z);
+                player.transform.localPosition = original_pos;
+                yield return new WaitForFixedUpdate();
+            }
+            player.GetComponent<PlayerBehavior>().invulnerable = false;
+            cf.GetComponent<SnapshotBehavior>().lock_player = true;
+            yield return new WaitForSeconds(6f);
+
+            // Revert back to original scale
+            cf.GetComponent<SnapshotBehavior>().ClearImage();
+            cf.GetComponent<SnapshotBehavior>().lock_player = false;
+            player.GetComponent<PlayerBehavior>().invulnerable = true;
+            original_pos = player.transform.localPosition;
+            for (int i = 1; i <= frame_flip_time; i++)
+            {
+                cf.transform.localScale = new Vector3(Mathf.Lerp(targetDim, s.x, i / frame_flip_time), s.y, s.z);
+                player.transform.localPosition = original_pos;
+                yield return new WaitForFixedUpdate();
+            }
+            player.GetComponent<PlayerBehavior>().invulnerable = false;
+            cf.GetComponent<SnapshotBehavior>().lock_player = true;
+            yield return new WaitForSeconds(12f);
+        }
     }
 
     IEnumerator Spell2() {
@@ -245,12 +365,14 @@ public class NewsieBehavior : EnemyBehavior
         while (true) {
             float r_x = Random.Range(-0.5f,0.5f);
             float r_y = Random.Range(-0.5f,0.5f);
+            SoundManager.Instance.PlayOneShot(spellFire1SFX, 0.65f);
             for (int i = 0; i < bul_num; i ++) {
                 int r = Random.Range(0,12);
-                SpawnStraightBullet(circle_pool, new Vector2(6*Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)+r_x,6*Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)+r_y),
+                SpawnStraightBullet(circle_pool, new Vector2(4*Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)+r_x,4*Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)+r_y),
                     new Vector2(Mathf.Cos(r+(Mathf.PI/bul_num/2)*i),
                                 Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)) * -1, 1.5f, 0.25f,
                     rotation:-270f+(RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/bul_num/2)*i),Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)))));
+                yield return new WaitForSeconds(0.01f);
             }
             if(freq_mod < 2.5f) {
                 freq_mod += 0.15f;
@@ -293,7 +415,7 @@ public class NewsieBehavior : EnemyBehavior
         }
     }
 
-    IEnumerator Spell1() {
+    public IEnumerator Spell1() {
         health = 5000;
         maxhealth = 5000;
         StartCoroutine("MoveTo", new Vector2(0f, 3f));

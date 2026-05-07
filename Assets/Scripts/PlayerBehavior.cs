@@ -14,9 +14,10 @@ public class PlayerBehavior : BHEntity
     [SerializeField] private float move_speed_slow = 2f;
     private float move_speed;
     [SerializeField] private int fire_rate = 1;
+    [SerializeField] public bool invulnerable = false;
     private int fire_ct = 0;
     private int fire_sfx_ct = 0;
-    [SerializeField] private GameObject[] hardpoints;
+    private GameObject[] hardpoints;
 
     [Header("Audio Clips")]
     [SerializeField] AudioClip grazeSFX;
@@ -37,7 +38,7 @@ public class PlayerBehavior : BHEntity
 
         move_speed = slowAction.ReadValue<float>() > 0.5f ? move_speed_slow : move_speed_fast;
 
-        my_pool = GameObject.Find("GameManager").GetComponent<GameManagerBehavior>().CreatePool(bul_player, 150);
+        my_pool = GameManager.Instance.CreatePool(bul_player, 150);
 
         hardpoints = new GameObject[4];
         hardpoints[0] = GameObject.Find("hardpoint1");
@@ -74,7 +75,7 @@ public class PlayerBehavior : BHEntity
                 {
                     SpawnStraightBullet(my_pool,
                         hardpoints[i].transform.position,
-                        Vector2.up, 22f);
+                        transform.up * Mathf.Sign(transform.lossyScale.y), 22f, 0f, false, Vector3.Angle(Vector3.up, transform.up));
                 }
 
                 if (fire_sfx_ct == 0)
@@ -112,7 +113,10 @@ public class PlayerBehavior : BHEntity
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.CompareTag("Bullet")) {
+        if (invulnerable) { return; }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
             if (other.gameObject.GetComponent<BulletBehavior>().graze_val > 0f)
             {
                 if (other.gameObject.GetComponent<BulletBehavior>().Graze(gameObject.transform))
