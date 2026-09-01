@@ -165,12 +165,15 @@ MonoBehaviour:
   indicate_time: 0
   spin: 0
   reserve: 0
+  delaySpawnVFXSprite: {fileID: 0}
+  dontDestroyOnPatternChange: 0
   can_graze: 0
   graze_val: 10
   grazing: 0
   dist: -1
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
+  snapshotSFX: {fileID: 8300000, guid: 9c47aed828510924aa5e6cd6054c2a7d, type: 3}
   captured_frame: []
   captured_pos: []
   frame_points: []

@@ -14,7 +14,7 @@ public class WindGustBehavior : StraightBulletBehavior
     void OnTriggerStay2D(Collider2D other)
     {
         PetalBulletBehavior petal = other.GetComponent<PetalBulletBehavior>();
-        Debug.Log(petal);
+
         if (petal != null)
         {
             if (petal.wind_force.sqrMagnitude < wind_dir.sqrMagnitude)

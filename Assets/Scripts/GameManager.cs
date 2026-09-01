@@ -54,31 +54,27 @@ public class GameManager : MonoBehaviour
         // Boundary Detection
         foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(HO_BOUND,0f),new Vector2(1f,14f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
-                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
-                if (!bh.reserve && bul.enabled) {
-                    bh.DestroySelf();
-                }
+                foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
+                    if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
+                        bh.DestroySelf();
             }
         foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(-HO_BOUND,0f),new Vector2(1f,14f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
-                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
-                if (!bh.reserve && bul.enabled) {
-                    bh.DestroySelf();
-                }
+                foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
+                    if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
+                        bh.DestroySelf();
             }
         foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,VO_BOUND),new Vector2(14f,1f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
-                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
-                if (!bh.reserve && bul.enabled) {
-                    bh.DestroySelf();
-                }
+                foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
+                    if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
+                        bh.DestroySelf();
             }
         foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,-VO_BOUND),new Vector2(14f,1f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
-                BulletBehavior bh = bul.GetComponent<BulletBehavior>();
-                if (!bh.reserve && bul.enabled) {
-                    bh.DestroySelf();
-                }
+                foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
+                    if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
+                        bh.DestroySelf();
             }
     }
 }

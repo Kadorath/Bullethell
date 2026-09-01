@@ -142,3 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3518ee5ccf3a984b9796948109021aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellFire1SFX: {fileID: 8300000, guid: c81365b3a7a69184499e8655b78b9368, type: 3}
+  spellFire2SFX: {fileID: 8300000, guid: 643158746ca08ac46ba42406d449efb1, type: 3}
+  spellFire3SFX: {fileID: 8300000, guid: a29fb2394ae048b448d2836805a7512a, type: 3}
+  spellBreakSFX: {fileID: 8300000, guid: d91cd793afae28f4a9ba447eb66dea34, type: 3}

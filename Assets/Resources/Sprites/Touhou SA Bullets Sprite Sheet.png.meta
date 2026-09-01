@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Touhou SA Yellow Ball Sm
+      name: ball_sm_yellow
       rect:
         serializedVersion: 2
         x: 37
@@ -241,7 +241,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -250,6 +250,380 @@ TextureImporter:
       bones: []
       spriteID: 3035acab13e0431468758cd3a904d8c3
       internalID: -249570398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_grey
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a31abdf04ea2be84999fb86762fa29c1
+      internalID: 97936253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_red
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: affcb9970042745468dc14eeed060ce3
+      internalID: 167469250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_blue
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0dc5905d13ddf4d4692e13f0695846b6
+      internalID: 27861225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_cyan
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55367bdd99fae9e4c8ab5f6e1a5bd17b
+      internalID: 1454419061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_green
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cdbca50b6d427f468abb7dabaa598a8
+      internalID: -309189383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hammer_yellow
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 678
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28928b483cee5e54aa957df6eb35548e
+      internalID: 462751197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bright_yellow
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 583
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97d97e77be2d7124389e2fadf1b015dc
+      internalID: 1628812142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bright_red
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 583
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec5855ae7416adc4694b59b19657e449
+      internalID: -60443514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bright_pink
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 583
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e73ca562c15abeb43996b8afac43e628
+      internalID: -610829721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spotlight
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 3
+        width: 275
+        height: 275
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c776cc1367f07249b34c5099c31ad19
+      internalID: 118397497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow_black
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 791
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29ff0ee340e8c549bd92134b475f2fc
+      internalID: 1658665615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bright_black
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 583
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0c168cbce342a2489dd391a7912deb5
+      internalID: -943567192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow_yellow
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 791
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccee867ce3c7f63429ca5730fac378d0
+      internalID: 191451879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow_yellow_dark
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 791
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 389e914aabfbb1d4a8dcef74f90e2bcd
+      internalID: 1319380808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ball_sm_black
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 574
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13d7939868ffcd149a0d63374bf6a608
+      internalID: 1926341802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: card_white
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 694
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bf4e5832fadfde4ba3f190df0fd1685
+      internalID: 309039354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Touhou SA Bullets Sprite Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 693
+        width: 11
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1200deb6d9ce8a94595992b3b8de93fa
+      internalID: 229930794
       vertices: []
       indices: 
       edges: []
@@ -268,12 +642,29 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Touhou SA Yellow Ball Sm: 884106936
+      Touhou SA Bullets Sprite Sheet_1: 229930794
+      arrow_black: 1658665615
+      arrow_yellow: 191451879
+      arrow_yellow_dark: 1319380808
+      ball_sm_black: 1926341802
+      ball_sm_yellow: 884106936
+      bright_black: -943567192
+      bright_pink: -610829721
+      bright_red: -60443514
+      bright_yellow: 1628812142
+      card_white: 309039354
       circle_black: -249570398
       diamond_blue: -306942007
       diamond_pink: 1705622924
+      hammer_blue: 27861225
+      hammer_cyan: 1454419061
+      hammer_green: -309189383
+      hammer_grey: 97936253
       hammer_orange: -1966665737
+      hammer_red: 167469250
+      hammer_yellow: 462751197
       soul: -1138030930
+      spotlight: 118397497
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

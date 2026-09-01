@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class SnapshotBehavior : BulletBehavior
 {
+    [SerializeField] AudioClip snapshotSFX;
     public Collider2D[] captured_frame;
     public Vector2[] captured_pos;
     public Vector3[] frame_points;
@@ -63,6 +64,7 @@ public class SnapshotBehavior : BulletBehavior
 
     public void SnapshotImageOnly()
     {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
         my_camera.orthographicSize = Mathf.Abs(Mathf.Abs(transform.localScale.x));
         my_camera.Render();
     }
@@ -74,6 +76,7 @@ public class SnapshotBehavior : BulletBehavior
 
     public Collider2D[] Snapshot()
     {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
         my_camera.orthographicSize = Mathf.Abs(Mathf.Abs(transform.localScale.x));
         my_camera.Render();
         frame.GetPositions(frame_points);
@@ -103,6 +106,7 @@ public class SnapshotBehavior : BulletBehavior
     }
 
     public void DevelopCapture() {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
         float padding = 0.2f+frame.widthMultiplier;
         Collider2D[] bul_to_remove = Physics2D.OverlapAreaAll(
             new Vector2(transform.localScale.x*frame_points[0].x + transform.position.x + padding,
@@ -127,6 +131,7 @@ public class SnapshotBehavior : BulletBehavior
     }
 
     public void FreezeFrame() {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
         foreach (Collider2D bul in captured_frame) {
             bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Background");
             bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
@@ -139,10 +144,12 @@ public class SnapshotBehavior : BulletBehavior
     }
 
     public void UnfreezeFrame() {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
         foreach (Collider2D bul in captured_frame) {
             bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Bullets");
             StraightBulletBehavior bul_script = bul.gameObject.GetComponent<StraightBulletBehavior>();
             bul_script.default_color = new Color(1f, 1f, 1f, 1f);    
+            bul.gameObject.GetComponentInChildren<SpriteRenderer>().color = bul_script.default_color;
             bul_script.direction = Quaternion.AngleAxis(transform.rotation.eulerAngles.z, Vector3.forward) * bul_script.direction;
             bul_script.speed = 2f;
             bul_script.reserve = false;

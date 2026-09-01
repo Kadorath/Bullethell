@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2189642963739639489}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.31, y: -0.28, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -96,6 +96,8 @@ MonoBehaviour:
   indicate_time: 0
   spin: 0
   reserve: 1
+  delaySpawnVFXSprite: {fileID: -610829721, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  dontDestroyOnPatternChange: 1
   can_graze: 1
   graze_val: 10
   grazing: 0
@@ -106,6 +108,7 @@ MonoBehaviour:
   wind_force: {x: 0, y: 0}
   petalSpr: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   rainSpr: {fileID: -306942007, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  angletoturn: 0
 --- !u!1 &5718873070214074793
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +143,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4271577557927719762
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -158,6 +162,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -179,9 +185,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -191,5 +199,4 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0

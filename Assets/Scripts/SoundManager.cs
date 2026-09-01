@@ -4,6 +4,13 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
     private AudioSource audioSource;
+
+    [Header("Audio Clips")]
+    public AudioClip spellFire1SFX;
+    public AudioClip spellFire2SFX;
+    public AudioClip spellFire3SFX;
+    public AudioClip spellBreakSFX;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
+using Random = UnityEngine.Random;
 
 public class EnemyBehavior : BHEntity
 {
@@ -21,10 +24,6 @@ public class EnemyBehavior : BHEntity
     public GameObject player;
     
     protected GameManager gameManager;
-
-    [Header("Audio Clips")]
-    [SerializeField] protected AudioClip spellFire1SFX;
-    [SerializeField] protected AudioClip spellFire2SFX;
 
     void Start()
     {
@@ -67,7 +66,8 @@ public class EnemyBehavior : BHEntity
         GameObject[] all_bullets = GameObject.FindGameObjectsWithTag("Bullet");
         foreach (GameObject bul in all_bullets) {
             // TODO: make this accomodate snapshot frame
-            bul.GetComponent<BulletBehavior>().DestroySelf();
+            foreach(BulletBehavior bb in bul.GetComponents<BulletBehavior>()) 
+                bb.DestroySelf();
         }
 
         pattern_ind ++; 
@@ -117,6 +117,21 @@ public class EnemyBehavior : BHEntity
         }
     }
 
+    protected IEnumerator MoveTo(Vector2 dest, float duration)
+    {
+        Vector2 startPos = transform.position;
+        float elapsed = 0f;
+        while (elapsed <= duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = InOutCubic(elapsed/duration);
+            transform.position = Vector2.Lerp(startPos, dest, t);
+            yield return null;
+        }
+
+        transform.position = dest;
+    }
+
     protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle, Vector2 target_scale) {
         float total_dist = Vector2.Distance(bul.transform.position,target_pos);
         float start_rot = bul.transform.eulerAngles.z;
@@ -137,11 +152,12 @@ public class EnemyBehavior : BHEntity
     protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle) {
         float total_dist = Vector2.Distance(bul.transform.position,target_pos);
         float start_rot = bul.transform.eulerAngles.z;
+        float angleToTurn = Mathf.DeltaAngle(start_rot, target_angle);
         for (float dist = total_dist; dist >= 0.001f;
             dist = Vector2.Distance(bul.transform.position,target_pos)) {
                 bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
                     *speed*Time.fixedDeltaTime, Space.World);
-                    bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,Mathf.Lerp(start_rot,target_angle,1 - dist/total_dist)));
+                    bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,start_rot + Mathf.Lerp(0f, angleToTurn, 1 - dist/total_dist)));
             yield return new WaitForFixedUpdate();
         }
     }
@@ -154,6 +170,49 @@ public class EnemyBehavior : BHEntity
                     *speed*Time.fixedDeltaTime, Space.World);
             yield return new WaitForFixedUpdate();
         }     
+    }
+
+    protected Vector2 RotateVector(Vector2 v, float angle)
+    {
+        float rad = angle * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+    }
+
+    protected void SpawnCircleRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s)
+    {
+        for (int i = 0; i < bul_num; i ++)
+        {
+            float angle = i * 360f / bul_num + rot;
+            Vector2 direction = RotateVector(Vector2.up, angle);
+            SpawnStraightBullet(bul_pool, pos, direction, s, 0.15f, rotation:angle);
+        }
+    }
+
+    protected void SpawnCircleRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s, Action<GameObject[], Vector3, Vector2, float, float, float> spawnMethod)
+    {
+        for (int i = 0; i < bul_num; i ++)
+        {
+            float angle = i * 360f / bul_num + rot;
+            Vector2 direction = RotateVector(Vector2.up, angle);
+            spawnMethod(bul_pool, pos, direction, s, 0.15f, angle);
+        }
+    }
+
+    protected void SpawnSquareRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s)
+    {
+        for (int i = 0; i < bul_num; i ++)
+        {
+            float squareOffset = Mathf.Lerp(1f, -1f, i/(bul_num-1f));
+            for (int side = 0; side < 4; side ++) {
+                Vector2 direction = new Vector2(side%2==0 ? squareOffset : (side < 2 ? 1f : -1f), side%2!=0 ? squareOffset : (side < 2 ? 1f : -1f)).normalized;
+                direction = RotateVector(direction, rot);
+                float baseSpeed = s;
+                float speed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
+                SpawnStraightBullet(bul_pool, pos, direction, speed, 0.15f, rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+            }
+        }
     }
 
     /*void OnTriggerEnter2D(Collider2D other) {
