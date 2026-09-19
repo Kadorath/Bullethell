@@ -28,12 +28,12 @@ public class NewsieBehavior : EnemyBehavior
         act_letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets_orange");        
         foreach (GameObject bul in act_letter_pool) {
             int r = Random.Range(0,28);
-            bul.GetComponentInChildren<SpriteRenderer>().sprite = act_letter_sprites[r];
+            bul.GetComponent<BulletBehavior>().SetSprite(act_letter_sprites[r]);
         }
-        letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets");
+        letter_sprites = Resources.LoadAll<Sprite>("Sprites/letterbullets_blank");
         foreach (GameObject bul in letter_pool) {
             int r = Random.Range(0,28);
-            bul.GetComponentInChildren<SpriteRenderer>().sprite = letter_sprites[r];
+            bul.GetComponent<BulletBehavior>().SetSprite(letter_sprites[r]);
         }
         hammer_o_pool = gameManager.CreatePool(bul_hammer_orange, 1000);      
         hammer_r_pool = gameManager.CreatePool(bul_hammer_red, 1000);  
@@ -53,28 +53,28 @@ public class NewsieBehavior : EnemyBehavior
         int bul_num = 48;
         while (true) {
             for (int i = 0; i < bul_num; i ++) {
+                float noise = Random.value * 8f;
                 for (int j = 0; j < 8; j ++) {
-                SpawnStraightBullet(hammer_o_pool,transform.position,
-                    new Vector2(Mathf.Cos(j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.1f)*i),
-                                    Mathf.Sin(j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.1f)*i)),
-                    3f, 0.1f,
-                    rotation:-90f+(RADTODEG*(Mathf.Atan2(
-                        Mathf.Sin(j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.1f)*i),
-                        Mathf.Cos(j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.1f)*i))))
-                    );
+                    float rad = j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.1f)*i + noise;
+                    SpawnStraightBullet(hammer_o_pool,transform.position,
+                        new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)),
+                        speed: 3f, delay: 0.1f,
+                        rotation:-90f+(RADTODEG*(Mathf.Atan2(
+                            Mathf.Sin(rad),
+                            Mathf.Cos(rad))))
+                        );
                 }
                 yield return WaitForFixedDuration(0.05f);
             }
             for (int i = bul_num/2; i >= 0; i -= 1) {
-                for (int j = 0; j < 8; j ++) {
-                SpawnStraightBullet(hammer_o_pool,transform.position,
-                    new Vector2(Mathf.Cos(0.07f + j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num))*i),
-                                    Mathf.Sin(0.07f + j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num))*i)),
-                    6f, 0.1f,
-                    rotation:-90f+(RADTODEG*(Mathf.Atan2(
-                        Mathf.Sin(0.07f + j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num))*i),
-                        Mathf.Cos(0.07f + j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num))*i))))
-                    );
+                for (int j = 0; j < 4; j ++) {
+                    float rad = 0.07f + j*Mathf.PI/4 + ((2*Mathf.PI)/(bul_num) + 0.2f)*i;
+                    SpawnStraightBullet(hammer_o_pool,transform.position,
+                        new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)),
+                        5f, 0.1f,
+                        rotation:-90f+(RADTODEG*(Mathf.Atan2(
+                            Mathf.Sin(rad), Mathf.Cos(rad))))
+                        );
                 }
                 yield return WaitForFixedDuration(0.005f);
             }
@@ -257,7 +257,7 @@ public class NewsieBehavior : EnemyBehavior
             for (int j = 0; j < 5; j ++)
             {
                 SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
-                SpawnSquareRing(transform.position, hammer_o_pool, bul_num, r + j*5f, 1.5f);
+                SpawnSquareRing(hammer_o_pool, transform.position, bul_num, r + j*5f, 1.5f);
                 yield return new WaitForSeconds(0.25f);
             }
 
@@ -267,7 +267,7 @@ public class NewsieBehavior : EnemyBehavior
             for (int j = 0; j < 4; j ++)
             {
                 float r2 = Random.Range(12f, 38f);
-                SpawnSquareRing(transform.position, hammer_r_pool, bul_num, r+r2, 4f);
+                SpawnSquareRing(hammer_r_pool, transform.position, bul_num, r+r2, 4f);
                 yield return new WaitForSeconds(0.05f);
             }
 
@@ -284,7 +284,7 @@ public class NewsieBehavior : EnemyBehavior
 
         int bul_num = 7;
         SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
-        SpawnSquareRing(cf.transform.position, hammer_o_pool, bul_num, 0f, 3f);
+        SpawnSquareRing(hammer_o_pool, cf.transform.position, bul_num, 0f, 3f);
 
         cf.GetComponent<SnapshotBehavior>().Indicate();
         yield return new WaitForSeconds(0.1f);
@@ -469,6 +469,7 @@ public class NewsieBehavior : EnemyBehavior
         StartCoroutine("MoveTo", new Vector2(0f, 3f));
         Coroutine aux1 = StartCoroutine("Spell1_aux1");
         Coroutine aux2 = StartCoroutine("Spell1_aux2", 1);
+        Coroutine aux3 = StartCoroutine("Spell1_aux3");
         yield return PatternTimer(60f);
         NextPattern();
     }
@@ -481,19 +482,11 @@ public class NewsieBehavior : EnemyBehavior
             yield return WaitForFixedDuration(.25f);
             for (int i = 0; i < 6; i ++) {
                 SpawnStraightBullet(letter_pool, new Vector2(-6.25f, 5f-(12*i/6f)),
-                    Vector2.right, 2f, rotation:0f);
+                    Vector2.right, speed:2f, alignWithDir:false, rotation:0f);
             }
             if (ct % 8 == 0) {
                 SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
-                SpawnSquareRing(transform.position, hammer_o_pool, 16, Random.Range(0, 180f), 1.5f);
-                // for (int i = 0; i < 32; i ++) {
-                //     int r_x = Random.Range(0,360);
-                //     int r_y = Random.Range(0,360);
-                //     SpawnStraightBullet(hammer_o_pool, transform.position,
-                //         new Vector2(Mathf.Cos(r_x+(Mathf.PI/16)*i),
-                //             Mathf.Sin(r_y+(Mathf.PI/16)*i)), 3f, 0.25f, 
-                //             rotation:-90f+(RADTODEG*(Mathf.Atan2(Mathf.Sin(r_y+(Mathf.PI/16)*i),Mathf.Cos(r_x+(Mathf.PI/16)*i)))));
-                // }
+                SpawnSquareRing(hammer_o_pool, transform.position, 14, Random.Range(0, 180f), 3f, 0.7f, 1.3f, 0.5f);
             }
             ct ++;
             if (ct == 80) { ct = 0; }
@@ -509,7 +502,8 @@ public class NewsieBehavior : EnemyBehavior
         Collider2D[] captured_bullets;
 
         float s = id == 1 ? 2.5f : 1.5f;
-        yield return MoveBullet(camera_frame, frame_speed, player.transform.position, 0f, new Vector2(s,s));
+        Vector2 startMoveTarget = id == 1 ? player.transform.position : new Vector2(Random.Range(-1*(BOUND_X-2f),BOUND_X-2f),Random.Range(2f, 4f));
+        yield return MoveBullet(camera_frame, frame_speed, startMoveTarget, 0f, new Vector2(s,s));
 
         int ct = 0;
         while (true) {
@@ -546,9 +540,37 @@ public class NewsieBehavior : EnemyBehavior
             }
             else {
                 yield return MoveBullet(camera_frame, frame_speed, 
-                    new Vector2(Random.Range(-1*(BOUND_X-2f),BOUND_X-2f),Random.Range(-1*(BOUND_Y-2f),BOUND_Y-2f)), 
+                    new Vector2(Random.Range(-1*(BOUND_X-2f),BOUND_X-2f),Random.Range(2f, 4f)), 
                     0f);
             }
+        }
+    }
+
+    IEnumerator Spell1_aux3() {
+        yield return WaitForFixedDuration(1f);
+        while (true) {
+            int r = Random.Range(2, 4);
+            List<float> lineYs = new List<float>();
+            for (int i = 0; i < r; i ++)
+                lineYs.Add(player.transform.position.y + Random.Range(-1f, 1f));
+            
+            for (int i = 0; i < lineYs.Count; i ++)
+            {
+                StartCoroutine(Spell1_aux2_1(lineYs[i], i%2 == 0));
+                yield return WaitForFixedDuration(0.5f);
+            }
+
+            yield return WaitForFixedDuration(4f);
+        }
+    }
+
+    IEnumerator Spell1_aux2_1(float y, bool right) {
+        for (int i = 0; i < 8; i ++)
+        {
+            SpawnStraightBullet(letter_pool, new Vector2(6.25f * (right ? -1 : 1), y),
+                right ? Vector2.right : Vector2.left, 
+                speed:6f, alignWithDir:false, rotation:0f);
+            yield return WaitForFixedDuration(.075f);
         }
     }
 }

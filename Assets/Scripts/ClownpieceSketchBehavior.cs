@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClownpieceSketchBehavior : EnemyBehavior
@@ -37,7 +36,7 @@ public class ClownpieceSketchBehavior : EnemyBehavior
         float center = 90f + ((180/Mathf.PI)*angleToPlayer(transform.position));
         while (true) {
             SpawnStraightBullet(red_star_pool, transform.position,
-             new Vector2(Mathf.Cos((Mathf.PI/180)*(i*10 - center)),Mathf.Sin((Mathf.PI/180)*(i*10 - center))), 5f, 1f, true);
+             new Vector2(Mathf.Cos((Mathf.PI/180)*(i*10 - center)),Mathf.Sin((Mathf.PI/180)*(i*10 - center))), 5f, 1f);
             yield return WaitForFixedDuration(0.01f);
             
             if (left) { i -= 1; }
@@ -89,8 +88,9 @@ public class ClownpieceSketchBehavior : EnemyBehavior
         yield return WaitForFixedDuration(9.5f);
         while (true) {
             for (int i = 0; i < 32; i ++) {
+                // used to pass deprecated parameter "spin" as true
                 SpawnStraightBullet(blue_star_pool, transform.position,
-                    new Vector2(Mathf.Cos((Mathf.PI/16)*i),Mathf.Sin((Mathf.PI/16)*i)), 3f, 1f, spin:true);
+                    new Vector2(Mathf.Cos((Mathf.PI/16)*i),Mathf.Sin((Mathf.PI/16)*i)), 3f, 1f);
             }
             yield return WaitForFixedDuration(2f);
         }

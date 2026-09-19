@@ -13,16 +13,14 @@ public class EnemyBehavior : BHEntity
     protected int maxhealth = 25000;
     protected bool transition = false;
     [SerializeField] protected string[] patterns;
-    protected Coroutine cur_pattern;
-    protected int pattern_ind = 0;
+    private Coroutine _curPattern;
+    private int _patternInd = 0;
 
-    private Collider2D[] collided_bul;
+    private Collider2D[] _collidedBul;
 
     private Image healthbar;
-    public TextMeshProUGUI timer;
-
-    public GameObject player;
-    
+    protected TextMeshProUGUI timer;
+    protected GameObject player;
     protected GameManager gameManager;
 
     void Start()
@@ -45,13 +43,13 @@ public class EnemyBehavior : BHEntity
         else {
             healthbar.fillAmount = health / (float)maxhealth;
         }
-        if (cur_pattern == null) {
-            cur_pattern = StartCoroutine(patterns[pattern_ind]);
+        if (_curPattern == null && _patternInd < patterns.Length) {
+            _curPattern = StartCoroutine(patterns[_patternInd]);
         }
 
         // Player bullet collision detection
-        collided_bul = Physics2D.OverlapBoxAll(transform.position, new Vector2(2f, 2f), 0f, LayerMask.GetMask("PlayerBullets"));
-        foreach (Collider2D bul in collided_bul) {
+        _collidedBul = Physics2D.OverlapBoxAll(transform.position, new Vector2(2f, 2f), 0f, LayerMask.GetMask("PlayerBullets"));
+        foreach (Collider2D bul in _collidedBul) {
             bul.gameObject.SetActive(false);
             gameManager.AddScore(10);
             if (health > 0) { health -= 1; }
@@ -70,10 +68,10 @@ public class EnemyBehavior : BHEntity
                 bb.DestroySelf();
         }
 
-        pattern_ind ++; 
+        _patternInd ++; 
         health = -1;
         StopAllCoroutines();
-        cur_pattern = null;
+        _curPattern = null;
     }
 
     // I have the x and y params for Atan2 swapped, look into this...
@@ -180,45 +178,67 @@ public class EnemyBehavior : BHEntity
         return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
     }
 
-    protected void SpawnCircleRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s)
+    /// <summary>
+    /// Spawns an even ring of bullets. The spawned bullets will be StraightBullets. For more specific spawning control, see method overloads.
+    /// </summary>
+    /// <param name="bul_pool">The object pool from which to draw bullets for the ring.</param>
+    /// <param name="origin">The starting position bullets spawn at.</param>
+    /// <param name="bul_num">The number of bullets to create for the ring. Bullets will be evenly distributed around the circle.</param>
+    /// <param name="rotation">The starting rotation in degrees to begin constructing the ring of bullets.</param>
+    /// <param name="speed">Speed of the spawned bullets</param>
+    /// <param name="turnSpeed">Turn speed of the spawned bullets</param>
+    /// <param name="delay">Spawn delay of the spawned bullets.</param>
+    /// <param name="speedChangeDuration">Speed change duration of the spawned bullets.</param>
+    /// <param name="startSpeedMod">Starting speed mod of the spawned bullets.</param>
+    /// <param name="finalSpeedMod">Final speed mod of the spawned bullets.</param>
+    protected void SpawnCircleRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float turnSpeed=0f, float delay=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f)
     {
         for (int i = 0; i < bul_num; i ++)
         {
-            float angle = i * 360f / bul_num + rot;
+            float angle = i * 360f / bul_num + rotation;
             Vector2 direction = RotateVector(Vector2.up, angle);
-            SpawnStraightBullet(bul_pool, pos, direction, s, 0.15f, rotation:angle);
+            SpawnStraightBullet(
+                bul_pool, origin, direction, 
+                speed:speed, delay:delay, rotation:angle, turnSpeed:turnSpeed, alignWithDir:true, 
+                speedChangeDuration:speedChangeDuration, startSpeedMod:startSpeedMod, finalSpeedMod:finalSpeedMod
+            );
         }
     }
 
-    protected void SpawnCircleRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s, Action<GameObject[], Vector3, Vector2, float, float, float> spawnMethod)
+    /// <summary>
+    /// Given a number of bullets and a starting rotation, calls spawnMethod with calculated direction and rotation for each
+    /// degree of the ring to spawn.
+    /// </summary>
+    /// <param name="bul_num">Number of bullets to spawn in the ring, evenly distributed in a full circle.</param>
+    /// <param name="rotation">Starting rotation to begin the ring at.</param>
+    /// <param name="spawnMethod">Action delegate to invoke to spawn the bullets in the ring. Given a direction and rotation, should spawn a bullet.</param>
+    protected void SpawnCircleRing(int bul_num, float rotation, Action<Vector2, float> spawnMethod)
     {
         for (int i = 0; i < bul_num; i ++)
         {
-            float angle = i * 360f / bul_num + rot;
+            float angle = i * 360f / bul_num + rotation;
             Vector2 direction = RotateVector(Vector2.up, angle);
-            spawnMethod(bul_pool, pos, direction, s, 0.15f, angle);
+            spawnMethod(direction, angle);
         }
     }
 
-    protected void SpawnSquareRing(Vector3 pos, GameObject[] bul_pool, int bul_num, float rot, float s)
+    protected void SpawnSquareRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f )
     {
         for (int i = 0; i < bul_num; i ++)
         {
             float squareOffset = Mathf.Lerp(1f, -1f, i/(bul_num-1f));
             for (int side = 0; side < 4; side ++) {
-                Vector2 direction = new Vector2(side%2==0 ? squareOffset : (side < 2 ? 1f : -1f), side%2!=0 ? squareOffset : (side < 2 ? 1f : -1f)).normalized;
-                direction = RotateVector(direction, rot);
-                float baseSpeed = s;
-                float speed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
-                SpawnStraightBullet(bul_pool, pos, direction, speed, 0.15f, rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+                Vector2 dir = new Vector2(side%2==0 ? squareOffset : (side < 2 ? 1f : -1f), side%2!=0 ? squareOffset : (side < 2 ? 1f : -1f)).normalized;
+                dir = RotateVector(dir, rotation);
+                float baseSpeed = speed;
+                float trueSpeed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
+                SpawnStraightBullet(
+                    bul_pool, origin, 
+                    direction:dir, speed:trueSpeed, delay:0.15f, 
+                    rotation:Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f,
+                    speedChangeDuration:speedChangeDuration, startSpeedMod:startSpeedMod, finalSpeedMod:finalSpeedMod
+                );
             }
         }
     }
-
-    /*void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.CompareTag("Player")) {
-            other.gameObject.SetActive(false);
-            if (health > 0) { health -= 1; }
-        }
-    }*/
 }

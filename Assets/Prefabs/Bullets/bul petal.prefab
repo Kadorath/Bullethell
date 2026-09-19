@@ -94,6 +94,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   indicate_time: 0
+  final_scale_x: 0
+  final_scale_y: 0
   spin: 0
   reserve: 1
   delaySpawnVFXSprite: {fileID: -610829721, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
@@ -105,10 +107,15 @@ MonoBehaviour:
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
   direction: {x: 0, y: 0}
+  alignWithDir: 0
+  turnSpeed: 0
+  startSpeedMod: 0
+  finalSpeedMod: 0
+  speedChangeDuration: 0
+  _speedMod: 1
   wind_force: {x: 0, y: 0}
   petalSpr: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   rainSpr: {fileID: -306942007, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
-  angletoturn: 0
 --- !u!1 &5718873070214074793
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +150,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4271577557927719762
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -188,7 +195,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -200,3 +207,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []

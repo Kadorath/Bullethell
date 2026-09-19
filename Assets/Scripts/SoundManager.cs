@@ -31,6 +31,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayOneShot(AudioClip clip, float volume = 1f)
     {
+        volume /= 10;
         audioSource.PlayOneShot(clip, volume); 
     }
 }

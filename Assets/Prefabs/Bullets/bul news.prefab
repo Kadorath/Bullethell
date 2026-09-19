@@ -34,6 +34,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8542013304053394585
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -52,6 +53,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -73,10 +76,12 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -753502842, guid: 6a0a486d15e522c4d903ec435c2f183f, type: 3}
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -2919545558810630116, guid: 9e037d223fa5c0e4abf1288b97bb3e11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -85,8 +90,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &5080222129821056026
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,8 +140,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   indicate_time: 0
+  final_scale_x: 0
+  final_scale_y: 0
   spin: 0
   reserve: 0
+  delaySpawnVFXSprite: {fileID: 0}
+  dontDestroyOnPatternChange: 0
   can_graze: 1
   graze_val: 10
   grazing: 0
@@ -144,6 +153,10 @@ MonoBehaviour:
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
   direction: {x: 0, y: 0}
+  startSpeedMod: 0
+  finalSpeedMod: 0
+  speedChangeDuration: 0
+  _speedMod: 1
 --- !u!61 &3134777751891215345
 BoxCollider2D:
   m_ObjectHideFlags: 0

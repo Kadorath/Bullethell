@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class PetalBulletBehavior : StraightBulletBehavior
 {
-    BlossomBehavior blossom;
-
     public Vector2 wind_force;
     [SerializeField] Sprite petalSpr;
     [SerializeField] Sprite rainSpr;
+    private bool _blowingIn = false;
+    private Vector2 _blowInStartPos;
+    private Vector2 _blowInTargetPos;
+    private float _blowInTimer = 0f;
+
     private enum State
     {
         Petal,
@@ -19,13 +22,30 @@ public class PetalBulletBehavior : StraightBulletBehavior
     void Start()
     {
         state = State.Petal;
-        blossom = GameObject.Find("Enemy").GetComponent<BlossomBehavior>();
         BlossomBehavior.Thunderclap += Transform;
     }
 
+    public override void Spawn()
+    {
+        base.Spawn();
+        _blowingIn = true;
+        _blowInTargetPos = transform.position;
+        _blowInStartPos = _blowInTargetPos + Vector2.up*19f;
+        transform.position = _blowInStartPos;
+        _blowInTimer = 0f;
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (_delayTime <= 0 && _blowingIn) 
+        {
+            float a = Util.EaseInOutQuad(_blowInTimer);
+            transform.position = Vector2.LerpUnclamped(_blowInStartPos, _blowInTargetPos, a);
+            _blowInTimer += Time.fixedDeltaTime / 5f;
+            if (_blowInTimer >= 1f) _blowingIn = false;
+            return;
+        }
 
         switch (state)
         {
@@ -59,21 +79,20 @@ public class PetalBulletBehavior : StraightBulletBehavior
         if (state == State.Petal && wind_force.sqrMagnitude > 0f)
             wind_force *= 0.99f;
         else
-            wind_force = Vector2.Lerp(wind_force, blossom.ambientWindDir, 0.8f);
+            wind_force = Vector2.Lerp(wind_force, BlossomBehavior.AmbientWindDir, 0.8f);
     }
 
     private void Transform(object sender, System.EventArgs e) {
-        can_graze = true;
         switch (state)
         {
             case State.Petal:
-                default_sprite = rainSpr;
+                _defaultSprite = rainSpr;
                 speed = 2.5f;
                 state = State.Rain;
                 Spawn();
                 break;
             case State.Rain:
-                default_sprite = petalSpr;
+                _defaultSprite = petalSpr;
                 wind_force = transform.up;
                 transform.localRotation = Quaternion.Euler(0f, 0f, 90f + Random.Range(-10f, 10f));
                 speed = 0.25f;

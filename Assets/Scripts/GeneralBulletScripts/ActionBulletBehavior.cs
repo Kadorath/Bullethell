@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ActionBulletBehavior : BulletBehavior
 {
+    public float speed;
     public Vector2 direction;
     public Vector2 destination;
     public delegate void AtDestination(GameObject self);
@@ -39,21 +40,21 @@ public class ActionBulletBehavior : BulletBehavior
         base.FixedUpdate();
         
         
-        if (delay_time >= 0f)
+        if (_delayTime > 0f)
         {
-            delay_time -= Time.fixedDeltaTime;
-            transform.localScale = new Vector3(Mathf.Lerp(final_scale_x, final_scale_y * 3, delay_time / indicate_time)
-                                                , Mathf.Lerp(final_scale_y, final_scale_y * 3, delay_time / indicate_time),
+            _delayTime -= Time.fixedDeltaTime;
+            transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX, _finalScaleX * 3, _delayTime / indicateTime)
+                                                , Mathf.Lerp(_finalScaleY, _finalScaleY * 3, _delayTime / indicateTime),
                                                 1f);
 
-            rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0.5f, delay_time / indicate_time / 2));
+            rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0.5f, _delayTime / indicateTime / 2));
 
-            if (delay_time <= 0f)
+            if (_delayTime <= 0f)
             {
                 rend.color = default_color;
-                transform.localScale = new Vector3(final_scale_x, final_scale_y, 1f);
-                rend.sprite = default_sprite;
-                rend.sortingOrder -= 10;
+                transform.localScale = new Vector3(_finalScaleX, _finalScaleY, 1f);
+                rend.sprite = _defaultSprite;
+                rend.sortingOrder = _baseSortingOrder;
             }
         }
         else

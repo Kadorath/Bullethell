@@ -21,40 +21,71 @@ public class BHEntity : MonoBehaviour
         return null;
     }
 
-    protected GameObject SpawnStraightBullet(GameObject[] pool, Vector2 pos, Vector2 dir,
-        float speed, float delay=0f, bool spin=false, float rotation=0f) 
+    /// <summary>
+    /// Spawns a straight bullet with the given parameters. Only the first three parameters are required.
+    /// </summary>
+    /// <param name="pool">The object pool from which to spawn a bullet.</param>
+    /// <param name="origin">The starting position of the bullet, in world space.</param>
+    /// <param name="direction">The starting direction of the bullet, in world space.</param>
+    /// <param name="speed">The starting speed of the bullet.</param>
+    /// <param name="delay">The time in seconds after spawning that the bullet takes to "appear" (the bullet's sprite begins enlarged and scales down to its base size over this time).</param>
+    /// <param name="rotation">The beginning rotation of the sprite of the bullet.</param>
+    /// <param name="alignWithDir">If true, the bullet object rotates to align its forward vector with its current direction.</param>
+    /// <param name="speedChangeDuration">Time duration starting from the end of delay over which the bullet's speed mod goes from startSpeedMod to finalSpeedMod. If 0, speed mod does not change.</param>
+    /// <param name="startSpeedMod">Starting speed mod for the bullet.</param>
+    /// <param name="finalSpeedMod">Final speed mod for the bullet. This will be the bullet's speed modifier once it has been active for speedChangeDuration seconds.</param>
+    /// <returns></returns>
+    protected GameObject SpawnStraightBullet(
+        GameObject[] pool, Vector2 origin, Vector2 direction,
+        float speed=0f, float delay=0f, float rotation=0f, float turnSpeed=0f, bool alignWithDir=false, 
+        float speedChangeDuration=0f, float startSpeedMod=0f, float finalSpeedMod=0f
+    )
     {
         GameObject bul = FindNextBullet(pool);
         if (bul == null) { return null; }
         foreach (BulletBehavior bb in bul.GetComponents<BulletBehavior>())
-            bb.enabled = bb is StraightBulletBehavior;
-
+            bb.enabled = bb is StraightBulletBehavior;        
         StraightBulletBehavior sbb = bul.GetComponent<StraightBulletBehavior>();
+
+        bul.transform.position = origin;
+        sbb.direction = direction;
         sbb.speed = speed;
-        sbb.direction = dir;
-        sbb.spin = spin;
-        sbb.indicate_time = delay;
-        bul.transform.position = pos;
+        sbb.indicateTime = delay;
         bul.transform.rotation = Quaternion.Euler(0f,0f,rotation);
+        sbb.turnSpeed = turnSpeed;
+        sbb.alignWithDirection = alignWithDir;
+        sbb.speedChangeDuration = speedChangeDuration;
+        sbb.startSpeedMod = startSpeedMod;
+        sbb.finalSpeedMod = finalSpeedMod;
         sbb.Spawn();
         bul.SetActive(true);
         return bul;
+
     }
 
-    protected GameObject SpawnStraightBullet(GameObject obj, Vector2 pos, Vector2 dir,
-        float speed, float delay = 0f, bool spin = false, float rotation = 0f)
+    protected GameObject SpawnStraightBullet(
+        GameObject obj, Vector2 origin, Vector2 direction,
+        float speed=0f, float delay=0f, float rotation=0f, float turnSpeed=0f, bool alignWithDir=false, 
+        float speedChangeDuration=0f, float startSpeedMod=0f, float finalSpeedMod=0f
+    )
     {
         GameObject bul = Instantiate(obj);
         foreach (BulletBehavior bb in bul.GetComponents<BulletBehavior>())
             bb.enabled = bb is StraightBulletBehavior;
 
-        bul.GetComponent<StraightBulletBehavior>().speed = speed;
-        bul.GetComponent<StraightBulletBehavior>().direction = dir;
-        bul.GetComponent<StraightBulletBehavior>().spin = spin;
-        bul.GetComponent<BulletBehavior>().indicate_time = delay;
-        bul.transform.position = pos;
-        bul.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
-        bul.GetComponent<BulletBehavior>().Spawn();
+        StraightBulletBehavior sbb = bul.GetComponent<StraightBulletBehavior>();
+        bul.transform.position = origin;
+        sbb.direction = direction;
+        sbb.speed = speed;
+        sbb.indicateTime = delay;
+        bul.transform.rotation = Quaternion.Euler(0f,0f,rotation);
+        sbb.turnSpeed = turnSpeed;
+        sbb.alignWithDirection = alignWithDir;
+        sbb.speedChangeDuration = speedChangeDuration;
+        sbb.startSpeedMod = startSpeedMod;
+        sbb.finalSpeedMod = finalSpeedMod;
+        sbb.Spawn();
+        bul.SetActive(true);
         return bul;
     }
 
@@ -66,7 +97,7 @@ public class BHEntity : MonoBehaviour
             bb.enabled = bb is KeyedBulletBehavior;
 
         KeyedBulletBehavior kbb = bul.GetComponent<KeyedBulletBehavior>();
-        kbb.indicate_time = delay;
+        kbb.indicateTime = delay;
         bul.transform.position = pos;
         kbb.Spawn();
         if (rotationKF != null)
@@ -102,7 +133,7 @@ public class BHEntity : MonoBehaviour
         bul_behavior.speed = speed;
         bul_behavior.destination = dest;
         bul_behavior.at_destination = act;
-        bul_behavior.indicate_time = delay;
+        bul_behavior.indicateTime = delay;
         bul.GetComponent<BulletBehavior>().Spawn();        
         return bul;
     }
@@ -132,7 +163,7 @@ public class BHEntity : MonoBehaviour
         bul_behavior.speed = speed;
         bul_behavior.destination = dest;
         bul_behavior.at_destination = act;
-        bul_behavior.indicate_time = delay;
+        bul_behavior.indicateTime = delay;
         bul.GetComponent<BulletBehavior>().Spawn();
         bul.SetActive(true);
         return bul;
@@ -150,7 +181,7 @@ public class BHEntity : MonoBehaviour
         bul.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
         abb.speed = speed;
         abb.direction = dir;
-        abb.indicate_time = delay;
+        abb.indicateTime = delay;
         abb.Spawn();
         bul.SetActive(true);
         return bul;
@@ -168,7 +199,7 @@ public class BHEntity : MonoBehaviour
         bul.transform.rotation = followTarget.transform.rotation;
         fbb.followTarget = followTarget;
         fbb.followDistance = followDist;
-        fbb.indicate_time = 0f;
+        fbb.indicateTime = 0f;
         fbb.Spawn();
         bul.SetActive(true);
         return bul;

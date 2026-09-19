@@ -135,9 +135,9 @@ public class SnapshotBehavior : BulletBehavior
         foreach (Collider2D bul in captured_frame) {
             bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Background");
             bul.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 1;
-            bul.gameObject.GetComponent<BulletBehavior>().speed = 0f;
-            bul.gameObject.GetComponent<BulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
-            bul.gameObject.GetComponent<BulletBehavior>().ResetGraze();
+            bul.gameObject.GetComponent<StraightBulletBehavior>().speed = 0f;
+            bul.gameObject.GetComponent<StraightBulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
+            bul.gameObject.GetComponent<StraightBulletBehavior>().ResetGraze();
             bul.gameObject.transform.SetParent(transform, true);
             bul.enabled = false;
         }

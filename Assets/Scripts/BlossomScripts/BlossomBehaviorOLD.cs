@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class BlossomBehavior : EnemyBehavior
+public class BlossomBehaviorOLD : EnemyBehavior
 {
     public static event EventHandler Thunderclap;
     [SerializeField] AudioClip thunderClapSFX;
 
-    public Vector2 ambientWindDir;
+    public static Vector2 ambientWindDir;
 
     [Header("Bullet Config")]
     public GameObject wind_gust;
@@ -106,8 +106,8 @@ public class BlossomBehavior : EnemyBehavior
     public IEnumerator Interlude1()
     {
         yield return WaitForFixedDuration(1f);
-        health = 1;
-        maxhealth = 1;
+        health = 5000;
+        maxhealth = 5000;
         Coroutine aux1 = StartCoroutine("Inter1_aux");
         yield return PatternTimer(90f);
         NextPattern();
@@ -118,11 +118,11 @@ public class BlossomBehavior : EnemyBehavior
         float petal_buffer_width = 6f;
         for (float i = BOUND_Y + petal_buffer_width; i > -BOUND_Y - petal_buffer_width; i -= Random.Range(0.5f, 2f))
         {
-            for (float j = -BOUND_X - petal_buffer_width + Random.Range(0f, 0.5f); j < BOUND_X + petal_buffer_width; j += Random.Range(1f, 2f))
+            for (float j = -BOUND_X - petal_buffer_width + Random.Range(0f, 0.5f); j < BOUND_X + petal_buffer_width; j += Random.Range(1.5f, 2f))
             {
                 SpawnStraightBullet(petal_pool, new Vector3(j, i + Random.Range(-0.5f, 0.5f), 0f),
-                    Vector2.down,
-                    0.25f, 0.25f,
+                    direction:Vector2.down,
+                    speed:0.25f, delay:0.25f,
                     rotation: 90f + Random.Range(-10f, 10f)
                 );
             }
@@ -134,7 +134,7 @@ public class BlossomBehavior : EnemyBehavior
             StartCoroutine("Inter2_aux");
             yield return new WaitForSeconds(5.5f);
 
-            GameObject gust = SpawnStraightBullet(wind_gust, new Vector2(0f, 12f), Vector3.down, 16f, -1f, false, 180f + Random.Range(-12f, 12f));
+            GameObject gust = SpawnStraightBullet(wind_gust, new Vector2(0f, 12f), Vector3.down, 16f, -1f, 180f + Random.Range(-12f, 12f));
             gust.GetComponent<WindGustBehavior>().SetForce(3f);
             gust.transform.localScale = new Vector3(24f, 3f, 1f);
             yield return new WaitForSeconds(4f);
@@ -171,23 +171,23 @@ public class BlossomBehavior : EnemyBehavior
                 SpawnKeyedBullet(arrow_pool, transform.position, rKFs, sKFs, 0.35f);
             }
 
-            SpawnCircleRing(transform.position, ball_blk_pool, 8, i*28f, 0.5f,
-            (GameObject[] pool, Vector3 pos, Vector2 dir, float spd, float delay, float rot) =>
-            {
-                Dictionary<int, float> sKFs = new Dictionary<int, float>
+            SpawnCircleRing(8, i*28f,
+                (Vector2 direction, float rotation) =>
                 {
-                    [0] = 6,
-                    [10] = 6,
-                    [40] = 0.75f,
-                    [400] = 0.75f,
-                    [650] = 4f
-                };
-                Dictionary<int, float> rKFs = new Dictionary<int, float>
-                {
-                    [0] = rot
-                };
-                SpawnKeyedBullet(pool, pos, rKFs, sKFs, delay);
-            });
+                    Dictionary<int, float> sKFs = new Dictionary<int, float>
+                    {
+                        [0] = 6,
+                        [10] = 6,
+                        [40] = 0.75f,
+                        [400] = 0.75f,
+                        [650] = 4f
+                    };
+                    Dictionary<int, float> rKFs = new Dictionary<int, float>
+                    {
+                        [0] = rotation
+                    };
+                    SpawnKeyedBullet(ball_blk_pool, transform.position, rKFs, sKFs, 0.15f);
+                });
             yield return new WaitForSeconds(0.1f);
         }
     }

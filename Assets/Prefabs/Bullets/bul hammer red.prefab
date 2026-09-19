@@ -84,10 +84,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   indicate_time: 0
+  final_scale_x: 0
+  final_scale_y: 0
   spin: 0
   reserve: 0
-  default_sprite: {fileID: 0}
-  delaySpawnVFXSprite: {fileID: -60443514, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  delaySpawnVFXSprite: {fileID: -943567192, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  dontDestroyOnPatternChange: 0
   can_graze: 1
   graze_val: 10
   grazing: 0
@@ -129,7 +131,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5594010482721360253
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -176,7 +178,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 167469250, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  m_Sprite: {fileID: 1658665615, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -186,3 +188,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []

@@ -5,63 +5,65 @@ public class BulletBehavior : MonoBehaviour
 {
     public const float RADTODEG = 180/Mathf.PI;
 
-    public float speed;
-    public float indicate_time;
-    protected float delay_time;
-    [SerializeField] protected float final_scale_x;
-    [SerializeField] protected float final_scale_y;
+    public float indicateTime;
+    protected float _delayTime;
+    [SerializeField] protected float _finalScaleX;
+    [SerializeField] protected float _finalScaleY;
     public bool spin = false;
     public bool reserve = false;
-    protected Sprite default_sprite;
+    protected Sprite _defaultSprite;
+    protected int _baseSortingOrder;
     [SerializeField] Sprite delaySpawnVFXSprite;
     [SerializeField] bool dontDestroyOnPatternChange = false;
 
-    [Header("Graze Properties")]
-    [SerializeField] protected bool can_graze = true;
-    public float graze_val = 10f;
-    public bool grazing = false;
-    public float dist = -1f;
-    protected SpriteRenderer rend;
+    [Header("Graze Fields")]
+    [SerializeField] private bool _grazing = false;
+    private float _grazeDistToPlayer = -1f;
+    private float _grazeVal = 10f;
+    private bool _canGraze = true;
+    public float GrazeVal { get => _grazeVal; }
     public Color graze_color = new Color(1f, .75f, .75f, 1f);
     public Color default_color = new Color(1f, 1f, 1f, 1f);
     private Coroutine grazingCoroutine;
 
+    protected SpriteRenderer rend;
+
     void Awake()
     {
         rend = GetComponentInChildren<SpriteRenderer>();
-        default_sprite = rend.sprite;
+        _defaultSprite = rend.sprite;
         default_color = rend.color;
-        final_scale_x = transform.localScale.x;
-        final_scale_y = transform.localScale.y;
+        _baseSortingOrder = rend.sortingOrder;
+        _finalScaleX = transform.localScale.x;
+        _finalScaleY = transform.localScale.y;
     }
 
-    protected virtual void FixedUpdate()
-    {
-        // if (!reserve && (Mathf.Abs(transform.position.x) > 20f || Mathf.Abs(transform.position.y) > 20f))
-        //     DestroySelf();
-    }
+    protected virtual void FixedUpdate() { }
 
     public virtual void Spawn()
     {
-        delay_time = indicate_time;
+        _delayTime = indicateTime;
 
-        if (delay_time > 0f)
+        if (_delayTime > 0f)
         {
             rend.color = default_color * new Color(1f, 1f, 1f, 0.5f);
-            rend.sprite = delaySpawnVFXSprite == null ? default_sprite : delaySpawnVFXSprite;
-            rend.sortingOrder += 10;
+            rend.sprite = delaySpawnVFXSprite == null ? _defaultSprite : delaySpawnVFXSprite;
+            rend.sortingOrder = 100;
         }
         else
+        {
             rend.color = default_color;
+            rend.sortingOrder = _baseSortingOrder;
+        }
     }
 
-    public bool IsSpawned() { return delay_time <= 0f; }
+    public bool IsSpawned() { return _delayTime <= 0f; }
 
     public bool Graze(Transform player)
     {
-        if (!can_graze) { return false; }
+        if (!_canGraze) { return false; }
 
-        grazing = true;
+        _grazing = true;
         rend.color = graze_color;
         grazingCoroutine = StartCoroutine("Grazing", player);
         return true;
@@ -69,18 +71,19 @@ public class BulletBehavior : MonoBehaviour
 
     IEnumerator Grazing(Transform player)
     {
-        while (grazing)
+        while (_grazing)
         {
-            if (graze_val > 0f)
+            if (_grazeVal > 0f)
             {
-                dist = (transform.position - player.position).sqrMagnitude;
-                dist = Mathf.Clamp(dist, 0f, 1f);
-                graze_val -= 1f - dist;
+                _grazeDistToPlayer = (transform.position - player.position).sqrMagnitude;
+                _grazeDistToPlayer = Mathf.Clamp(_grazeDistToPlayer, 0f, 1f);
+                _grazeVal -= 1f - _grazeDistToPlayer;
                 rend.transform.localPosition = Random.insideUnitCircle * 0.008f;
             }
             else
             {
-                grazing = false;
+                _grazing = false;
+                GameManager.Instance.ScoreGraze();
             }
             yield return new WaitForFixedUpdate();
         }
@@ -89,11 +92,12 @@ public class BulletBehavior : MonoBehaviour
     }
 
     public void ResetGraze() {
-        if (!can_graze) { return; }
+        if (!_canGraze) { return; }
+        if (rend == null) { return; }
         rend.color = default_color;
         rend.transform.localPosition = Vector3.zero;
-        graze_val = 10f;
-        grazing = false;
+        _grazeVal = 10f;
+        _grazing = false;
 
         if (grazingCoroutine != null)
             StopCoroutine(grazingCoroutine);
@@ -102,7 +106,13 @@ public class BulletBehavior : MonoBehaviour
     public void DestroySelf() {
         if (dontDestroyOnPatternChange) return;
         ResetGraze();
-        transform.localScale = new Vector3(final_scale_x, final_scale_y, 1f);
+        transform.localScale = new Vector3(_finalScaleY, _finalScaleY, 1f);
         gameObject.SetActive(false);
+    }
+
+    public void SetSprite(Sprite spr)
+    {
+        rend.sprite = spr;
+        _defaultSprite = spr;
     }
 }

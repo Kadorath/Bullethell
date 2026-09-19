@@ -119,6 +119,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -593,7 +606,7 @@ TextureImporter:
         width: 14
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -615,7 +628,7 @@ TextureImporter:
         width: 11
         height: 2
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -624,6 +637,50 @@ TextureImporter:
       bones: []
       spriteID: 1200deb6d9ce8a94595992b3b8de93fa
       internalID: 229930794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow_darkblue
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 791
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e005d69d87afa8e43b2a1c05051642a4
+      internalID: 1447117009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bright_blue
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 583
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a53db8a621feba04f99f68dbe2e59520
+      internalID: 547713085
       vertices: []
       indices: 
       edges: []
@@ -644,11 +701,13 @@ TextureImporter:
     nameFileIdTable:
       Touhou SA Bullets Sprite Sheet_1: 229930794
       arrow_black: 1658665615
+      arrow_darkblue: 1447117009
       arrow_yellow: 191451879
       arrow_yellow_dark: 1319380808
       ball_sm_black: 1926341802
       ball_sm_yellow: 884106936
       bright_black: -943567192
+      bright_blue: 547713085
       bright_pink: -610829721
       bright_red: -60443514
       bright_yellow: 1628812142

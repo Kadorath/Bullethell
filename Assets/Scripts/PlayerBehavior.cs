@@ -75,7 +75,7 @@ public class PlayerBehavior : BHEntity
                 {
                     SpawnStraightBullet(my_pool,
                         hardpoints[i].transform.position,
-                        transform.up * Mathf.Sign(transform.lossyScale.y), 22f, 0f, false, Vector3.Angle(Vector3.up, transform.up));
+                        transform.up * Mathf.Sign(transform.lossyScale.y), 22f, 0f, Vector3.Angle(Vector3.up, transform.up));
                 }
 
                 if (fire_sfx_ct == 0)
@@ -117,7 +117,7 @@ public class PlayerBehavior : BHEntity
 
         if (other.gameObject.CompareTag("Bullet"))
         {
-            if (other.gameObject.GetComponent<BulletBehavior>().graze_val > 0f)
+            if (other.gameObject.GetComponent<BulletBehavior>().GrazeVal > 0f)
             {
                 if (other.gameObject.GetComponent<BulletBehavior>().Graze(gameObject.transform))
                     SoundManager.Instance.PlayOneShot(grazeSFX);
@@ -127,7 +127,7 @@ public class PlayerBehavior : BHEntity
 
     void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.CompareTag("Bullet")) {
-            if (other.gameObject.GetComponent<BulletBehavior>().graze_val > 0f) {
+            if (other.gameObject.GetComponent<BulletBehavior>().GrazeVal > 0f) {
                 other.gameObject.GetComponent<BulletBehavior>().ResetGraze();
             }
         }

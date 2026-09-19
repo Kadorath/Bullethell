@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public const float HO_BOUND = 8f;
-    public const float VO_BOUND = 8f;
+    public const float HO_BOUND = 12f;
+    public const float VO_BOUND = 12f;
     public GameObject enemy;
     public GameObject player;
     public int stage;
     
     private int _score = 0;
     public int Score { get { return _score; }}
+    private int _grazeCt = 0;
+    public int GrazeCount { get { return _grazeCt; }}
 
     public static GameManager Instance { get; private set; }
     void Awake() {
@@ -49,28 +51,29 @@ public class GameManager : MonoBehaviour
     }
 
     public void AddScore(int score) { _score += score;}
+    public void ScoreGraze() { _grazeCt++; }
 
     void FixedUpdate() {
         // Boundary Detection
-        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(HO_BOUND,0f),new Vector2(1f,14f),0f,
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(HO_BOUND,0f),new Vector2(1f,24f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
                 foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
                     if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
                         bh.DestroySelf();
             }
-        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(-HO_BOUND,0f),new Vector2(1f,14f),0f,
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(-HO_BOUND,0f),new Vector2(1f,24f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
                 foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
                     if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
                         bh.DestroySelf();
             }
-        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,VO_BOUND),new Vector2(14f,1f),0f,
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,VO_BOUND),new Vector2(24f,1f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
                 foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
                     if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
                         bh.DestroySelf();
             }
-        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,-VO_BOUND),new Vector2(14f,1f),0f,
+        foreach (Collider2D bul in Physics2D.OverlapBoxAll(new Vector2(0f,-VO_BOUND),new Vector2(24f,1f),0f,
             LayerMask.GetMask("EnemyBullets","PlayerBullets"))) {
                 foreach (BulletBehavior bh in bul.GetComponents<BulletBehavior>())
                     if (bul.gameObject.activeSelf && !bh.reserve && bh.enabled)
