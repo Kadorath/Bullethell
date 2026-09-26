@@ -9,9 +9,38 @@ using Random = UnityEngine.Random;
 
 public class EnemyBehavior : BHEntity
 {
-    [SerializeField] protected int health = 25000;
-    protected int maxhealth = 25000;
+    [Serializable]
+    private class PooledBullet
+    {
+        public string Name;
+        public GameObject Bullet;
+        public Sprite Sprite;
+        public int Amount;    
+    }
+
+    public class Pattern
+    {
+        public string Name;
+        public int Health;
+        public int Time;
+        public IEnumerator[] Routines;
+
+        public Pattern(string name, int hp, int time, params IEnumerator[] routines)
+        {
+            Name = name;
+            Health = hp;
+            Time = time;
+            Routines = routines;
+        }
+    }
+
+    [SerializeField] protected int health = -1;
+    protected int maxhealth = -1;
     protected bool transition = false;
+    
+    [SerializeField] List<PooledBullet> _bullets;
+    protected Dictionary<string, GameObject[]> _bulletPools;
+    protected Pattern[] _patternList;
     [SerializeField] protected string[] patterns;
     private Coroutine _curPattern;
     private int _patternInd = 0;
@@ -30,6 +59,19 @@ public class EnemyBehavior : BHEntity
 
         healthbar = GameObject.Find("EnemyHealthbar").GetComponent<Image>();
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+
+        _bulletPools = new Dictionary<string, GameObject[]>();
+        foreach (PooledBullet bulToPool in _bullets)
+        {
+            GameObject template = Instantiate(bulToPool.Bullet);
+            template.name = string.IsNullOrEmpty(bulToPool.Name) ? template.name : bulToPool.Name;
+            if (bulToPool.Sprite != null)
+                template.GetComponentInChildren<SpriteRenderer>().sprite = bulToPool.Sprite;
+            GameObject[] newPool = gameManager.CreatePool(template, bulToPool.Amount);
+            _bulletPools[template.name] = newPool;
+            Destroy(template);
+        }
+
         InitEnemy();
     }
 
@@ -44,7 +86,7 @@ public class EnemyBehavior : BHEntity
             healthbar.fillAmount = health / (float)maxhealth;
         }
         if (_curPattern == null && _patternInd < patterns.Length) {
-            _curPattern = StartCoroutine(patterns[_patternInd]);
+            _curPattern = StartCoroutine(RunPattern(FindPattern(patterns[_patternInd])));
         }
 
         // Player bullet collision detection
@@ -59,6 +101,26 @@ public class EnemyBehavior : BHEntity
         }
     }
 
+    private Pattern FindPattern(string patternName)
+    {
+        foreach (Pattern p in _patternList)
+            if (p.Name == patternName) return p;
+        return null;
+    }
+
+    private IEnumerator RunPattern(Pattern pattern)
+    {
+        Debug.Log("VIA RUN PATTERN");
+        yield return WaitForFixedDuration(2f);
+        health = pattern.Health;
+        maxhealth = pattern.Health;
+        foreach (IEnumerator routine in pattern.Routines)
+            StartCoroutine(routine);
+
+        if (pattern.Time == -1) yield break;;
+        yield return PatternTimer(pattern.Time);
+        NextPattern();
+    }
     protected void NextPattern() {
         // Clear all enemy bullets
         GameObject[] all_bullets = GameObject.FindGameObjectsWithTag("Bullet");
@@ -222,7 +284,7 @@ public class EnemyBehavior : BHEntity
         }
     }
 
-    protected void SpawnSquareRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f )
+    protected void SpawnSquareRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f, float noise=0f)
     {
         for (int i = 0; i < bul_num; i ++)
         {
@@ -233,7 +295,7 @@ public class EnemyBehavior : BHEntity
                 float baseSpeed = speed;
                 float trueSpeed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
                 SpawnStraightBullet(
-                    bul_pool, origin, 
+                    bul_pool, origin+(Vector3)Random.insideUnitCircle*noise,
                     direction:dir, speed:trueSpeed, delay:0.15f, 
                     rotation:Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f,
                     speedChangeDuration:speedChangeDuration, startSpeedMod:startSpeedMod, finalSpeedMod:finalSpeedMod

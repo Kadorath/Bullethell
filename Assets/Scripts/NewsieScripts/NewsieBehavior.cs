@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -36,17 +37,17 @@ public class NewsieBehavior : EnemyBehavior
             bul.GetComponent<BulletBehavior>().SetSprite(letter_sprites[r]);
         }
         hammer_o_pool = gameManager.CreatePool(bul_hammer_orange, 1000);      
-        hammer_r_pool = gameManager.CreatePool(bul_hammer_red, 1000);  
-    }
-    
-    // Interlude 1
-    public IEnumerator Interlude1() {
-        yield return WaitForFixedDuration(2f);
-        health = 5000;
-        maxhealth = 5000;
-        Coroutine aux1 = StartCoroutine("Inter1_aux1");
-        yield return PatternTimer(60f);
-        NextPattern();
+        hammer_r_pool = gameManager.CreatePool(bul_hammer_red, 1000);
+
+        _patternList = new Pattern[]
+        {
+            new Pattern("Interlude1", 5000, 60, Inter1_aux1()),   
+            new Pattern("Interlude2", 5000, 60, Inter1_aux1()),
+            new Pattern("Interlude3", 5000, 60, Inter1_aux1(), Inter3_aux1()),
+            new Pattern("Spell1", 5000, 60, Spell1_aux1(), Spell1_aux2(1), Spell1_aux3(), Spell1_aux4()),  // Sunday Special
+            new Pattern("Spell2", 5000, 60, Spell2_aux1(), Spell2_aux2(), Spell2_aux3()), // Smile to the Camera
+            new Pattern("Spell3", 5000, 60, Spell3_aux1()),
+        };
     }
 
     IEnumerator Inter1_aux1() {
@@ -82,17 +83,6 @@ public class NewsieBehavior : EnemyBehavior
         }
     }
     
-    // Interlude 2
-    public IEnumerator Interlude2() {
-        yield return WaitForFixedDuration(1f);
-        health = 5000;
-        maxhealth = 5000;
-        StartCoroutine("MoveTo", new Vector2(0f, 2f));
-        Coroutine aux1 = StartCoroutine("Inter2_aux1");
-        yield return PatternTimer(60f);
-        NextPattern();
-    }
-
     // Send bullets in a spiral out towards the camera frame
     IEnumerator Inter2_aux1() {
         yield return WaitForFixedDuration(1f);
@@ -222,18 +212,6 @@ public class NewsieBehavior : EnemyBehavior
         }
     }
 
-    // Interlude 3
-    public IEnumerator Interlude3()
-    {
-        yield return WaitForFixedDuration(1f);
-        health = 5000;
-        maxhealth = 5000;
-        StartCoroutine("MoveTo", new Vector2(0f, 2f));
-        Coroutine aux1 = StartCoroutine("Inter3_aux1");
-        yield return PatternTimer(60f);
-        NextPattern();
-    }
-
     public IEnumerator Inter3_aux1()
     {
         yield return WaitForFixedDuration(1f);
@@ -290,18 +268,6 @@ public class NewsieBehavior : EnemyBehavior
         yield return new WaitForSeconds(0.1f);
         Destroy(cf);
     }
-
-
-    public IEnumerator Spell3() {
-        yield return WaitForFixedDuration(1f);
-        health = 5000;
-        maxhealth = 5000;
-        StartCoroutine("MoveTo", new Vector2(0f, 2f));
-        Coroutine aux1 = StartCoroutine("Spell3_aux1");
-        yield return PatternTimer(60f);
-        NextPattern();        
-    }
-
 
     IEnumerator Spell3_aux1()
     {
@@ -373,19 +339,6 @@ public class NewsieBehavior : EnemyBehavior
     //     }
     // }
 
-    // Smile to the Camera!
-    public IEnumerator Spell2() {
-        yield return WaitForFixedDuration(1f);
-        health = 5000;
-        maxhealth = 5000;
-        StartCoroutine("MoveTo", new Vector2(0f, 4f));
-        Coroutine aux1 = StartCoroutine("Spell2_aux1");
-        Coroutine aux2 = StartCoroutine("Spell2_aux2");
-        Coroutine aux3 = StartCoroutine("Spell2_aux3");
-        yield return PatternTimer(60f);
-        NextPattern();
-    }
-
     // Spawn irregular rings around player at shortening intervals
     IEnumerator Spell2_aux1() {
         int bul_num = 18;
@@ -397,7 +350,7 @@ public class NewsieBehavior : EnemyBehavior
             SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
             for (int i = 0; i < bul_num; i ++) {
                 int r = Random.Range(0,12);
-                SpawnStraightBullet(hammer_o_pool, new Vector2(4*Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)+r_x,4*Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)+r_y),
+                SpawnStraightBullet(hammer_o_pool, new Vector2(4.25f*Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)+r_x,4.25f*Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)+r_y),
                     new Vector2(Mathf.Cos(r+(Mathf.PI/bul_num/2)*i),
                                 Mathf.Sin(r+(Mathf.PI/bul_num/2)*i)) * -1, 1.5f, 0.25f,
                     rotation:-270f+(RADTODEG*(Mathf.Atan2(Mathf.Sin(r+(Mathf.PI/bul_num/2)*i),Mathf.Cos(r+(Mathf.PI/bul_num/2)*i)))));
@@ -419,12 +372,12 @@ public class NewsieBehavior : EnemyBehavior
         float frame_speed = 5f;
         float center_x = 0f;
         float center_y = -0.5f;
-        yield return MoveBullet(camera_frame, frame_speed, new Vector3(center_x,center_y, -1f), 0f, new Vector2(2f,2f));
-        yield return WaitForFixedDuration(2f);
+        yield return MoveBullet(camera_frame, frame_speed, new Vector3(center_x,center_y, -1f), 0f, new Vector2(2.5f,2.5f));
+        yield return WaitForFixedDuration(1f);
         float noise_x = 0f;
         float noise_y = 0f;
         while (true) {
-            yield return WaitForFixedDuration(2.5f);
+            yield return WaitForFixedDuration(0.5f);
             cf_behavior.Snapshot();
             yield return WaitForFixedDuration(1f);
             noise_x = Random.Range(-0.25f, 0.25f);
@@ -441,58 +394,40 @@ public class NewsieBehavior : EnemyBehavior
             yield return WaitForFixedDuration(0.15f);
             yield return MoveBullet(camera_frame, frame_speed, new Vector3(center_x, center_y, -1f));
             cf_behavior.DevelopCapture();
-            yield return WaitForFixedDuration(2f);
+            yield return WaitForFixedDuration(1f);
         }
     }
 
-    // Fire bullets directly at player at intervals
+    // Fire messy square rings at random intervals
     IEnumerator Spell2_aux3()
     {
         yield return WaitForFixedDuration(3f);
-
-        bool left = true;
         while (true)
         {
-            left = !left;
-            yield return WaitForFixedDuration(1.8f);
-            SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire2SFX, 0.65f);
-            Vector2 upperOffset = new Vector2(left ? -1.5f : 1.5f, 1f) + Random.insideUnitCircle*0.5f;
-            Vector2 toPlayer = (player.transform.position - (transform.position+(Vector3)upperOffset)).normalized;
-            SpawnStraightBullet(hammer_r_pool, transform.position + (Vector3)upperOffset, toPlayer, 3f, 0.15f, rotation:Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg - 90f);
+            yield return RandomMove();
+            SpawnSquareRing(hammer_o_pool, transform.position, 8, 
+                rotation:Random.Range(0f, 180f), speed:3f,
+                speedChangeDuration:0.45f, startSpeedMod:2f, finalSpeedMod:0.6f,
+                noise:0.1f
+            );
+            yield return WaitForFixedDuration(Random.Range(0.25f,4f));
         }
     }
 
-    // Monday Special
-    public IEnumerator Spell1() {
-        health = 5000;
-        maxhealth = 5000;
-        StartCoroutine("MoveTo", new Vector2(0f, 3f));
-        Coroutine aux1 = StartCoroutine("Spell1_aux1");
-        Coroutine aux2 = StartCoroutine("Spell1_aux2", 1);
-        Coroutine aux3 = StartCoroutine("Spell1_aux3");
-        yield return PatternTimer(60f);
-        NextPattern();
-    }
     
     // Launch squares of bullets at regular intervals, send lines of letter bullets horizontally across the screen
     IEnumerator Spell1_aux1() {
         yield return WaitForFixedDuration(1f);
-        int ct = 0;
         while (true) {
-            yield return WaitForFixedDuration(.25f);
+            yield return WaitForFixedDuration(.07f);
             for (int i = 0; i < 6; i ++) {
                 SpawnStraightBullet(letter_pool, new Vector2(-6.25f, 5f-(12*i/6f)),
-                    Vector2.right, speed:2f, alignWithDir:false, rotation:0f);
+                    Vector2.right, speed:7f, alignWithDir:false, rotation:0f);
             }
-            if (ct % 8 == 0) {
-                SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
-                SpawnSquareRing(hammer_o_pool, transform.position, 14, Random.Range(0, 180f), 3f, 0.7f, 1.3f, 0.5f);
-            }
-            ct ++;
-            if (ct == 80) { ct = 0; }
         }
     }
 
+    // Movement of snapshot frames in Spell1
     IEnumerator Spell1_aux2(int id) {
         yield return WaitForFixedDuration(4f);
 
@@ -507,7 +442,7 @@ public class NewsieBehavior : EnemyBehavior
 
         int ct = 0;
         while (true) {
-            yield return WaitForFixedDuration(1f);
+            yield return WaitForFixedDuration(0.7f + id==3?0.25f:0f);
             captured_bullets = cf_behavior.Snapshot();
 
             cf_behavior.FreezeFrame();
@@ -515,9 +450,10 @@ public class NewsieBehavior : EnemyBehavior
             yield return WaitForFixedDuration(0.25f);
 
             ct ++;
-            if (ct == 2 && id == 1) {
+            if (ct == 2 && id == 1)
                 StartCoroutine("Spell1_aux2", 2);
-            }
+            if (ct == 3 && id == 1)
+                StartCoroutine("Spell1_aux2", 3);
 
             Vector2 target_pos = new Vector2(2f, 4f);
             if (Random.value < 0.5f) {
@@ -527,12 +463,12 @@ public class NewsieBehavior : EnemyBehavior
             float target_angle = RADTODEG*angleToPlayer(target_pos);
             yield return MoveBullet(camera_frame, frame_speed, target_pos, target_angle);
 
-            yield return WaitForFixedDuration(0.15f);
+            yield return WaitForFixedDuration(0.05f);
 
             cf_behavior.Indicate();
             cf_behavior.UnfreezeFrame();
 
-            yield return WaitForFixedDuration(0.25f);
+            yield return WaitForFixedDuration(0.15f);
             
             if (id == 1) {
                 yield return RandomMove();
@@ -549,7 +485,7 @@ public class NewsieBehavior : EnemyBehavior
     IEnumerator Spell1_aux3() {
         yield return WaitForFixedDuration(1f);
         while (true) {
-            int r = Random.Range(2, 4);
+            int r = Random.Range(2, 5);
             List<float> lineYs = new List<float>();
             for (int i = 0; i < r; i ++)
                 lineYs.Add(player.transform.position.y + Random.Range(-1f, 1f));
@@ -560,7 +496,18 @@ public class NewsieBehavior : EnemyBehavior
                 yield return WaitForFixedDuration(0.5f);
             }
 
-            yield return WaitForFixedDuration(4f);
+            yield return WaitForFixedDuration(2.5f);
+        }
+    }
+
+    // Square ring of paper balls
+    IEnumerator Spell1_aux4()
+    {
+        while (true)
+        {
+            SoundManager.Instance.PlayOneShot(SoundManager.Instance.spellFire1SFX, 0.65f);
+            SpawnSquareRing(hammer_o_pool, transform.position, 14, Random.Range(0, 180f), 3f, 0.45f, 2f, 0.6f, 0.1f);
+            yield return WaitForFixedDuration(2f);
         }
     }
 

@@ -16,6 +16,7 @@ public class StraightBulletBehavior : BulletBehavior
     public float finalSpeedMod;
     public float speedChangeDuration;
     [SerializeField] private float _speedMod = 1f;
+    public float SpeedMod { get => _speedMod; set => _speedMod = value; }
     private float _elapsedTime = 0f;
     public override void Spawn()
     {
@@ -31,26 +32,14 @@ public class StraightBulletBehavior : BulletBehavior
 
         if (_delayTime > 0f)
         {
-            _delayTime -= Time.fixedDeltaTime;
-            transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX / 3, _finalScaleX * 2, _delayTime / indicateTime)
-                                                , Mathf.Lerp(_finalScaleY / 3, _finalScaleY * 2, _delayTime / indicateTime),
-                                                1f);
-            rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0.5f, _delayTime / indicateTime / 2));
-
-            if (_delayTime <= 0f)
-            {
-                rend.color = default_color;
-                transform.localScale = new Vector3(_finalScaleX, _finalScaleY, 1f);
-                rend.sprite = _defaultSprite;
-                rend.sortingOrder = _baseSortingOrder;
-            }
+            return;
         }
         else
         {
             Vector2 moveDir = (direction * (speed*_speedMod));
             transform.Translate(moveDir * Time.fixedDeltaTime, Space.World);
 
-            if (Mathf.Abs(speedChangeDuration) > 0.00001f)
+            if (Mathf.Abs(speedChangeDuration) > 0.00001f && _elapsedTime <= speedChangeDuration)
             {
                 _speedMod = Mathf.Lerp(startSpeedMod, finalSpeedMod, _elapsedTime / speedChangeDuration);
             }

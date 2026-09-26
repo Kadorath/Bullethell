@@ -92,22 +92,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420aea5f1c96d2a458c020a675f09724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  indicate_time: 0
-  final_scale_x: 0
-  final_scale_y: 0
+  indicateTime: 0
+  _finalScaleX: 0
+  _finalScaleY: 0
   spin: 0
   reserve: 1
   delaySpawnVFXSprite: {fileID: -610829721, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   dontDestroyOnPatternChange: 1
-  can_graze: 1
-  graze_val: 10
-  grazing: 0
-  dist: -1
+  _grazing: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
+  speed: 0
   direction: {x: 0, y: 0}
-  alignWithDir: 0
+  alignWithDirection: 0
   turnSpeed: 0
   startSpeedMod: 0
   finalSpeedMod: 0
@@ -116,6 +113,7 @@ MonoBehaviour:
   wind_force: {x: 0, y: 0}
   petalSpr: {fileID: 1705622924, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   rainSpr: {fileID: -306942007, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  state: 0
 --- !u!1 &5718873070214074793
 GameObject:
   m_ObjectHideFlags: 0

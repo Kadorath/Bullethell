@@ -38,7 +38,25 @@ public class BulletBehavior : MonoBehaviour
         _finalScaleY = transform.localScale.y;
     }
 
-    protected virtual void FixedUpdate() { }
+    protected virtual void FixedUpdate()
+    {
+        if (_delayTime > 0)
+        {
+            _delayTime -= Time.fixedDeltaTime;
+            transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX / 3, _finalScaleX * 2, _delayTime / indicateTime)
+                                                , Mathf.Lerp(_finalScaleY / 3, _finalScaleY * 2, _delayTime / indicateTime),
+                                                1f);
+            rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0.5f, _delayTime / indicateTime / 2));
+
+            if (_delayTime <= 0f)
+            {
+                rend.color = default_color;
+                transform.localScale = new Vector3(_finalScaleX, _finalScaleY, 1f);
+                rend.sprite = _defaultSprite;
+                rend.sortingOrder = _baseSortingOrder;
+            }
+        }
+    }
 
     public virtual void Spawn()
     {
@@ -84,13 +102,14 @@ public class BulletBehavior : MonoBehaviour
             {
                 _grazing = false;
                 GameManager.Instance.ScoreGraze();
+                OnGraze();
             }
             yield return new WaitForFixedUpdate();
         }
         rend.transform.localPosition = Vector3.zero;
         rend.color = default_color;
     }
-
+    protected virtual void OnGraze() { }
     public void ResetGraze() {
         if (!_canGraze) { return; }
         if (rend == null) { return; }

@@ -672,7 +672,7 @@ TextureImporter:
         width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -681,6 +681,28 @@ TextureImporter:
       bones: []
       spriteID: a53db8a621feba04f99f68dbe2e59520
       internalID: 547713085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ball_bright_cyan
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 758
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bba372563f6fb4f47aef37d0307c6601
+      internalID: -674790532
       vertices: []
       indices: 
       edges: []
@@ -704,6 +726,7 @@ TextureImporter:
       arrow_darkblue: 1447117009
       arrow_yellow: 191451879
       arrow_yellow_dark: 1319380808
+      ball_bright_cyan: -674790532
       ball_sm_black: 1926341802
       ball_sm_yellow: 884106936
       bright_black: -943567192

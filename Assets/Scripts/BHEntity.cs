@@ -10,7 +10,7 @@ public class BHEntity : MonoBehaviour
     public const float BOUND_X = 4.8f;
     public const float BOUND_Y = 6f;
 
-    protected GameObject FindNextBullet(GameObject[] pool) {
+    protected static GameObject FindNextBullet(GameObject[] pool) {
         for (int i = 0; i < pool.Length; i ++) {
             if (!pool[i].activeSelf) {
                 foreach (BulletBehavior bb in pool[i].GetComponents<BulletBehavior>())
@@ -60,7 +60,6 @@ public class BHEntity : MonoBehaviour
         sbb.Spawn();
         bul.SetActive(true);
         return bul;
-
     }
 
     protected GameObject SpawnStraightBullet(

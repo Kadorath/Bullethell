@@ -12,7 +12,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Snapshot
@@ -63,3 +63,4 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
+  m_MigratedRenderPipelines: []

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PetalBulletBehavior : StraightBulletBehavior
 {
-    public Vector2 wind_force;
-    [SerializeField] Sprite petalSpr;
-    [SerializeField] Sprite rainSpr;
     private bool _blowingIn = false;
     private Vector2 _blowInStartPos;
     private Vector2 _blowInTargetPos;
@@ -17,7 +14,11 @@ public class PetalBulletBehavior : StraightBulletBehavior
         Petal,
         Rain
     }
-    private State state;
+    [Header("Petal Fields")]
+    public Vector2 wind_force;
+    [SerializeField] Sprite petalSpr;
+    [SerializeField] Sprite rainSpr;
+    [SerializeField] private State state;
 
     void Start()
     {
@@ -87,17 +88,19 @@ public class PetalBulletBehavior : StraightBulletBehavior
         {
             case State.Petal:
                 _defaultSprite = rainSpr;
-                speed = 2.5f;
+                rend.sprite = rainSpr;
+                speed = 3.5f;
                 state = State.Rain;
-                Spawn();
+                base.Spawn();
                 break;
             case State.Rain:
                 _defaultSprite = petalSpr;
+                rend.sprite = petalSpr;
                 wind_force = transform.up;
                 transform.localRotation = Quaternion.Euler(0f, 0f, 90f + Random.Range(-10f, 10f));
                 speed = 0.25f;
                 state = State.Petal;
-                Spawn();
+                base.Spawn();
                 break;
         }
     }
