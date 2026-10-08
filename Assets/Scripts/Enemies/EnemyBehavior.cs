@@ -204,7 +204,7 @@ public class EnemyBehavior : BHEntity
         float start_rot = bul.transform.eulerAngles.z;
         float start_scale_x = bul.transform.localScale.x;
         float start_scale_y = bul.transform.localScale.y;
-        for (float dist = total_dist; dist >= 0.1f;
+        for (float dist = total_dist; dist >= 0.01f; // TODO: This needs to not just be based on distance.
             dist = Vector2.Distance(bul.transform.position,target_pos)) {
                 bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
                     *speed*Time.fixedDeltaTime, Space.World);
