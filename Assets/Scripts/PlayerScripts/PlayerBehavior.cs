@@ -38,7 +38,7 @@ public class PlayerBehavior : BHEntity
 
         move_speed = slowAction.ReadValue<float>() > 0.5f ? move_speed_slow : move_speed_fast;
 
-        my_pool = GameManager.Instance.CreatePool(bul_player, 150);
+        my_pool = GameManager.Instance.CreatePool(bul_player, 500);
 
         hardpoints = new GameObject[4];
         hardpoints[0] = GameObject.Find("hardpoint1");

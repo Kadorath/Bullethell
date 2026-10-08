@@ -50,11 +50,12 @@ public class BlossomBehavior : EnemyBehavior
             for (float j = -BOUND_X - petal_buffer_width + Random.Range(0f, 0.5f); j < BOUND_X + petal_buffer_width; j += Random.Range(1.5f, 2.5f))
             {
                 if (Random.value < 0.25f) continue;
-                SpawnStraightBullet(petal_pool, new Vector3(j, i + Random.Range(-0.5f, 0.5f), 0f),
+                PetalBulletBehaviour petal = SpawnStraightBullet(petal_pool, new Vector3(j, i + Random.Range(-0.5f, 0.5f), 0f),
                     direction:Vector2.down,
                     speed:0.25f, delay:0f,
                     rotation: 90f + Random.Range(-10f, 10f)
-                );
+                ).GetComponent<PetalBulletBehaviour>();
+                petal.enabled = true;
             }
         }
         yield return WaitForFixedDuration(0.6f);

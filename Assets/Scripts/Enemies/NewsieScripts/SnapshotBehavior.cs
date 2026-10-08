@@ -62,6 +62,12 @@ public class SnapshotBehavior : BulletBehavior
         flash.color = new Color(1f,1f,1f,0.5f);
     }
 
+    public void Flash()
+    {
+        SoundManager.Instance.PlayOneShot(snapshotSFX);
+        flash.color = new Color(1f,1f,1f,0.9f);
+    }
+
     public void SnapshotImageOnly()
     {
         SoundManager.Instance.PlayOneShot(snapshotSFX);
@@ -90,16 +96,18 @@ public class SnapshotBehavior : BulletBehavior
         );
         foreach (Collider2D bul in captured_frame)
         {
-            bul.gameObject.GetComponent<BulletBehavior>().reserve = true;
+            bul.gameObject.GetComponent<StraightBulletBehavior>().reserve = true;
+            if (bul.gameObject.GetComponent<GravityBulletBehaviour>() != null)
+                bul.gameObject.GetComponent<GravityBulletBehaviour>().reserve = true;
         }
         if (lock_player)
         {
             captured_pos = new Vector2[captured_frame.Length];
             for (int i = 0; i < captured_frame.Length; i++)
             {
-                captured_pos[i] = captured_frame[i].transform.position;
+                captured_pos[i] = captured_frame[i].transform.position - transform.position;
             }
-            captured_player_pos = player.transform.position;
+            captured_player_pos = player.transform.position - transform.position;
         }
         flash.color = new Color(1f, 1f, 1f, 1f);
         return captured_frame;
@@ -120,11 +128,13 @@ public class SnapshotBehavior : BulletBehavior
         }
 
         for (int i = 0; i < captured_frame.Length; i ++) {
-            captured_frame[i].gameObject.transform.position = captured_pos[i];
-            captured_frame[i].gameObject.GetComponent<BulletBehavior>().reserve = false;
+            captured_frame[i].gameObject.transform.position = transform.position + (Vector3)captured_pos[i];
+            captured_frame[i].gameObject.GetComponent<StraightBulletBehavior>().reserve = false;
+            if (captured_frame[i].gameObject.GetComponent<GravityBulletBehaviour>() != null)
+                captured_frame[i].gameObject.GetComponent<GravityBulletBehaviour>().reserve = false;
             captured_frame[i].gameObject.SetActive(true);
         }
-        player.transform.position = captured_player_pos;
+        player.transform.position = transform.position + (Vector3)captured_player_pos;
 
         my_camera.targetTexture.Release();
         flash.color = new Color(1f,1f,1f,1f);
@@ -138,6 +148,12 @@ public class SnapshotBehavior : BulletBehavior
             bul.gameObject.GetComponent<StraightBulletBehavior>().SpeedMod = 0f;
             bul.gameObject.GetComponent<StraightBulletBehavior>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
             bul.gameObject.GetComponent<StraightBulletBehavior>().ResetGraze();
+            if (bul.gameObject.GetComponent<GravityBulletBehaviour>() != null)
+            {
+                bul.gameObject.GetComponent<GravityBulletBehaviour>().SpeedMod = 0f;
+                bul.gameObject.GetComponent<GravityBulletBehaviour>().default_color = new Color(188f/255f, 188f/255f, 188f/255f, 1f);
+                bul.gameObject.GetComponent<GravityBulletBehaviour>().ResetGraze();
+            }
             bul.gameObject.transform.SetParent(transform, true);
             bul.enabled = false;
         }

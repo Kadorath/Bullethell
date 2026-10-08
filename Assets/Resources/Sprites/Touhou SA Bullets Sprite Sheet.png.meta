@@ -694,7 +694,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -703,6 +703,28 @@ TextureImporter:
       bones: []
       spriteID: bba372563f6fb4f47aef37d0307c6601
       internalID: -674790532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: star_white
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 647
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2cd02df2644e92489b500e1c596e171
+      internalID: 1284638541
       vertices: []
       indices: 
       edges: []
@@ -747,6 +769,7 @@ TextureImporter:
       hammer_yellow: 462751197
       soul: -1138030930
       spotlight: 118397497
+      star_white: 1284638541
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -13,7 +13,7 @@ public class WindGustBehavior : StraightBulletBehavior
 
     void OnTriggerStay2D(Collider2D other)
     {
-        PetalBulletBehavior petal = other.GetComponent<PetalBulletBehavior>();
+        PetalBulletBehaviour petal = other.GetComponent<PetalBulletBehaviour>();
 
         if (petal != null)
         {

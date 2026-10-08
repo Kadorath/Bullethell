@@ -419,13 +419,13 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.8
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.9228435
+  orthographic size: 6
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -639,11 +639,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 25000
+  _bullets: []
   patterns:
   - Interlude1
   - Spell1
   thunderClapSFX: {fileID: 8300000, guid: 7a8bc3f47933d4d46a6da91b67a89ff5, type: 3}
-  ambientWindDir: {x: 0, y: 0}
   wind_gust: {fileID: 3984409157691208185, guid: cdf3eaed5a2989b4ea75d26c4c7c2ae4, type: 3}
   bul_petal: {fileID: 2189642963739639489, guid: 38d7936220f687743a99b84687bbb040, type: 3}
   bul_arrow: {fileID: 1501150196022406135, guid: 99fe2b63582f62a44aee435ddabdc11e, type: 3}
@@ -1105,6 +1105,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1896906961726894115, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}

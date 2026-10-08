@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8735695252801555595}
   - component: {fileID: 6419243387994070436}
-  - component: {fileID: -5928269974803394615}
-  - component: {fileID: -6701289368472127291}
+  - component: {fileID: 2140166344038127248}
+  - component: {fileID: -6665067000553301968}
   m_Layer: 7
-  m_Name: BulletArrow
+  m_Name: bul paperball
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1.75, y: 1.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4807289673036312820}
@@ -69,9 +69,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.01}
-  m_Radius: 0.05
---- !u!114 &-5928269974803394615
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.09
+--- !u!114 &2140166344038127248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,11 +82,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a8566c3f1e97114f87f1327c08cd597, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StraightBulletBehavior
+  m_EditorClassIdentifier: 
   indicateTime: 0
   _finalScaleX: 0
   _finalScaleY: 0
-  spin: 0
+  spin: 1
   reserve: 0
   delaySpawnVFXSprite: {fileID: -943567192, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   dontDestroyOnPatternChange: 0
@@ -97,11 +97,11 @@ MonoBehaviour:
   direction: {x: 0, y: 0}
   alignWithDirection: 0
   turnSpeed: 0
-  startSpeedMod: 0
-  finalSpeedMod: 0
+  startSpeedMod: 1
+  finalSpeedMod: 1
   speedChangeDuration: 0
-  _speedMod: 1
---- !u!114 &-6701289368472127291
+  _speedMod: 0
+--- !u!114 &-6665067000553301968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,9 +110,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1501150196022406135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2384945a9ef11f439fe312f7cc55b47, type: 3}
+  m_Script: {fileID: 11500000, guid: fff8b8891f18f194a93e54ba7bb3c2c7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KeyedBulletBehavior
+  m_EditorClassIdentifier: Assembly-CSharp::GravityBullet
   indicateTime: 0
   _finalScaleX: 0
   _finalScaleY: 0
@@ -131,12 +131,7 @@ MonoBehaviour:
   finalSpeedMod: 0
   speedChangeDuration: 0
   _speedMod: 1
-  lastRotationKey: 0
-  nextRotationKey: 0
-  elapsedTime: 0
-  elapsedTicks: 0
-  lastSpeedKey: 0
-  nextSpeedKey: 0
+  gravityScale: 1
 --- !u!1 &4841814528553665127
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,12 +213,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1658665615, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e01bd74d90e98642a4f4b05cad6e650, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.08, y: 0.16}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

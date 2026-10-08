@@ -49,7 +49,8 @@ public class CreepingFrostBehaviour : BulletBehavior
         {
             if (!Physics2D.OverlapCircle(pos, 0.2f, LayerMask.GetMask("EnemyBullets","Player")))
             {
-                WinterBehaviour.SpawnFrostBullet(pos, 0.1f);
+                if (Random.value < 0.5f)
+                    WinterBehaviour.SpawnFrostBullet(pos, 0.1f);
             }
         }
     }

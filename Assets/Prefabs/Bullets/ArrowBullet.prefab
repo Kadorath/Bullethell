@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8735695252801555595}
   - component: {fileID: 6419243387994070436}
-  - component: {fileID: 2140166344038127248}
+  - component: {fileID: -5928269974803394615}
+  - component: {fileID: -6701289368472127291}
   m_Layer: 7
-  m_Name: bul hammer org
+  m_Name: ArrowBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,9 +69,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.03
---- !u!114 &2140166344038127248
+  m_Offset: {x: 0, y: -0.01}
+  m_Radius: 0.05
+--- !u!114 &-5928269974803394615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,19 +82,61 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a8566c3f1e97114f87f1327c08cd597, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  indicate_time: 0
+  m_EditorClassIdentifier: Assembly-CSharp::StraightBulletBehavior
+  indicateTime: 0
+  _finalScaleX: 0
+  _finalScaleY: 0
   spin: 0
   reserve: 0
-  delaySpawnVFXSprite: {fileID: 1628812142, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
-  can_graze: 1
-  graze_val: 10
-  grazing: 0
-  dist: -1
+  delaySpawnVFXSprite: {fileID: -943567192, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  dontDestroyOnPatternChange: 0
+  _grazing: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
+  speed: 0
   direction: {x: 0, y: 0}
+  alignWithDirection: 0
+  turnSpeed: 0
+  startSpeedMod: 0
+  finalSpeedMod: 0
+  speedChangeDuration: 0
+  _speedMod: 1
+--- !u!114 &-6701289368472127291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501150196022406135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2384945a9ef11f439fe312f7cc55b47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeyedBulletBehavior
+  indicateTime: 0
+  _finalScaleX: 0
+  _finalScaleY: 0
+  spin: 0
+  reserve: 0
+  delaySpawnVFXSprite: {fileID: 0}
+  dontDestroyOnPatternChange: 0
+  _grazing: 0
+  graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
+  default_color: {r: 1, g: 1, b: 1, a: 1}
+  speed: 0
+  direction: {x: 0, y: 0}
+  alignWithDirection: 0
+  turnSpeed: 0
+  startSpeedMod: 0
+  finalSpeedMod: 0
+  speedChangeDuration: 0
+  _speedMod: 1
+  lastRotationKey: 0
+  nextRotationKey: 0
+  elapsedTime: 0
+  elapsedTicks: 0
+  lastSpeedKey: 0
+  nextSpeedKey: 0
 --- !u!1 &4841814528553665127
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +171,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5594010482721360253
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -175,7 +218,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1966665737, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  m_Sprite: {fileID: 1658665615, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -185,3 +228,4 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []

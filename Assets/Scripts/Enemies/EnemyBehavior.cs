@@ -34,16 +34,20 @@ public class EnemyBehavior : BHEntity
         }
     }
 
+    // Health
     [SerializeField] protected int health = -1;
     protected int maxhealth = -1;
     protected bool transition = false;
     
-    [SerializeField] List<PooledBullet> _bullets;
-    protected Dictionary<string, GameObject[]> _bulletPools;
+    // Patterns
     protected Pattern[] _patternList;
     [SerializeField] protected string[] patterns;
     private Coroutine _curPattern;
     private int _patternInd = 0;
+
+    // Bullets
+    [SerializeField] List<PooledBullet> _bullets;
+    protected Dictionary<string, GameObject[]> _bulletPools;
 
     private Collider2D[] _collidedBul;
 
@@ -86,7 +90,9 @@ public class EnemyBehavior : BHEntity
             healthbar.fillAmount = health / (float)maxhealth;
         }
         if (_curPattern == null && _patternInd < patterns.Length) {
-            _curPattern = StartCoroutine(RunPattern(FindPattern(patterns[_patternInd])));
+            Pattern patternToRun = FindPattern(patterns[_patternInd]);
+            if (patternToRun != null)
+                _curPattern = StartCoroutine(RunPattern(patternToRun));
         }
 
         // Player bullet collision detection
@@ -103,6 +109,8 @@ public class EnemyBehavior : BHEntity
 
     private Pattern FindPattern(string patternName)
     {
+        if (_patternList == null) return null;
+
         foreach (Pattern p in _patternList)
             if (p.Name == patternName) return p;
         return null;
@@ -110,7 +118,6 @@ public class EnemyBehavior : BHEntity
 
     private IEnumerator RunPattern(Pattern pattern)
     {
-        Debug.Log("VIA RUN PATTERN");
         yield return WaitForFixedDuration(2f);
         health = pattern.Health;
         maxhealth = pattern.Health;
@@ -197,7 +204,7 @@ public class EnemyBehavior : BHEntity
         float start_rot = bul.transform.eulerAngles.z;
         float start_scale_x = bul.transform.localScale.x;
         float start_scale_y = bul.transform.localScale.y;
-        for (float dist = total_dist; dist >= 0.001f;
+        for (float dist = total_dist; dist >= 0.1f;
             dist = Vector2.Distance(bul.transform.position,target_pos)) {
                 bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
                     *speed*Time.fixedDeltaTime, Space.World);
@@ -206,20 +213,27 @@ public class EnemyBehavior : BHEntity
                                                 Mathf.Lerp(start_scale_y, target_scale.y, 1 - dist/total_dist),
                                                 1f);
             yield return new WaitForFixedUpdate();
-        }        
+        }
+
+        bul.transform.position = target_pos;
+        bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
+        bul.transform.localScale = new Vector3(target_scale.x, target_scale.y, 1f);
     }
 
     protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle) {
         float total_dist = Vector2.Distance(bul.transform.position,target_pos);
         float start_rot = bul.transform.eulerAngles.z;
         float angleToTurn = Mathf.DeltaAngle(start_rot, target_angle);
-        for (float dist = total_dist; dist >= 0.001f;
+        for (float dist = total_dist; dist >= 0.1f;
             dist = Vector2.Distance(bul.transform.position,target_pos)) {
                 bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
                     *speed*Time.fixedDeltaTime, Space.World);
                     bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,start_rot + Mathf.Lerp(0f, angleToTurn, 1 - dist/total_dist)));
             yield return new WaitForFixedUpdate();
         }
+
+        bul.transform.position = target_pos;
+        bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
     }
 
     protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos) {

@@ -8,18 +8,13 @@ public class WinterBehaviour : EnemyBehavior
     protected override void InitEnemy()
     {
         _frostPool = _bulletPools["Creeping Frost"];
+
+        _patternList = new Pattern[]
+        {
+            new Pattern("Spell1", 5000, 90, Spell1_aux1())
+        };
     }
 
-    public IEnumerator Spell1()
-    {
-        yield return WaitForFixedDuration(1f);
-        health = 5000;
-        maxhealth = 5000;
-        yield return MoveTo(new Vector2(0f, 2f));
-        Coroutine aux1 = StartCoroutine("Spell1_aux1");
-        yield return PatternTimer(90f);
-        NextPattern();
-    }
     public IEnumerator Spell1_aux1()
     {
         yield return WaitForFixedDuration(1f);

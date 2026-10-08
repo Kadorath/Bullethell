@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static float BOUND_X = 5.4f;
+    public static float BOUND_Y = 6f;
     public const float HO_BOUND = 12f;
     public const float VO_BOUND = 12f;
     public GameObject enemy;

@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 1135832547334785889}
   - component: {fileID: 3134777751891215345}
   m_Layer: 7
-  m_Name: bul news
+  m_Name: bul letter
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

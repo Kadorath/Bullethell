@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PetalBulletBehavior : StraightBulletBehavior
+public class PetalBulletBehaviour : StraightBulletBehavior
 {
     private bool _blowingIn = false;
     private Vector2 _blowInStartPos;

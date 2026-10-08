@@ -7,8 +7,8 @@ public class BHEntity : MonoBehaviour
 {
     public const float RADTODEG = 180/Mathf.PI;
     public const float DEGTORAD = Mathf.PI/180;
-    public const float BOUND_X = 4.8f;
-    public const float BOUND_Y = 6f;
+    protected float BOUND_X { get { return GameManager.BOUND_X; } set { GameManager.BOUND_X = value; }}
+    protected float BOUND_Y { get { return GameManager.BOUND_Y; } set { GameManager.BOUND_Y = value; }}
 
     protected static GameObject FindNextBullet(GameObject[] pool) {
         for (int i = 0; i < pool.Length; i ++) {
@@ -19,6 +19,14 @@ public class BHEntity : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void Update()
+    {
+        Debug.DrawLine(new Vector3(-BOUND_X, -BOUND_Y, 0f), new Vector3(BOUND_X, -BOUND_Y, 0f), Color.red);
+        Debug.DrawLine(new Vector3(-BOUND_X, BOUND_Y, 0f), new Vector3(BOUND_X, BOUND_Y, 0f), Color.red);
+        Debug.DrawLine(new Vector3(-BOUND_X, -BOUND_Y, 0f), new Vector3(-BOUND_X, BOUND_Y, 0f), Color.red);
+        Debug.DrawLine(new Vector3(BOUND_X, -BOUND_Y, 0f),  new Vector3(BOUND_X, BOUND_Y, 0f), Color.red);
     }
 
     /// <summary>
@@ -44,7 +52,7 @@ public class BHEntity : MonoBehaviour
         GameObject bul = FindNextBullet(pool);
         if (bul == null) { return null; }
         foreach (BulletBehavior bb in bul.GetComponents<BulletBehavior>())
-            bb.enabled = bb is StraightBulletBehavior;        
+            bb.enabled = bb.GetType() == typeof(StraightBulletBehavior);      
         StraightBulletBehavior sbb = bul.GetComponent<StraightBulletBehavior>();
 
         bul.transform.position = origin;
@@ -84,6 +92,31 @@ public class BHEntity : MonoBehaviour
         sbb.startSpeedMod = startSpeedMod;
         sbb.finalSpeedMod = finalSpeedMod;
         sbb.Spawn();
+        bul.SetActive(true);
+        return bul;
+    }
+
+    protected GameObject SpawnGravityBulet(GameObject[] pool, Vector2 origin, Vector2 direction,
+        float speed=0f, float delay=0f, float rotation=0f, float turnSpeed=0f, bool alignWithDir=false, 
+        float speedChangeDuration=0f, float startSpeedMod=0f, float finalSpeedMod=0f, float gravityScale=1f)
+    {
+        GameObject bul = FindNextBullet(pool);
+        if (bul == null) { return null; }
+        foreach (BulletBehavior bb in bul.GetComponents<BulletBehavior>())
+            bb.enabled = bb.GetType() == typeof(GravityBulletBehaviour);      
+        GravityBulletBehaviour gbb = bul.GetComponent<GravityBulletBehaviour>();
+        bul.transform.position = origin;
+        gbb.direction = direction;
+        gbb.speed = speed;
+        gbb.indicateTime = delay;
+        bul.transform.rotation = Quaternion.Euler(0f,0f,rotation);
+        gbb.turnSpeed = turnSpeed;
+        gbb.alignWithDirection = alignWithDir;
+        gbb.speedChangeDuration = speedChangeDuration;
+        gbb.startSpeedMod = startSpeedMod;
+        gbb.finalSpeedMod = finalSpeedMod;
+        gbb.gravityScale = gravityScale;
+        gbb.Spawn();
         bul.SetActive(true);
         return bul;
     }

@@ -125,7 +125,7 @@ public class BulletBehavior : MonoBehaviour
     public void DestroySelf() {
         if (dontDestroyOnPatternChange) return;
         ResetGraze();
-        transform.localScale = new Vector3(_finalScaleY, _finalScaleY, 1f);
+        transform.localScale = new Vector3(_finalScaleX, _finalScaleY, 1f);
         gameObject.SetActive(false);
     }
 
