@@ -22,8 +22,8 @@ public class ClownpieceSketchBehavior : EnemyBehavior
     }
 
     IEnumerator Pattern1() {
-        health = 2500;
-        maxhealth = health;
+        _health = 2500;
+        maxhealth = _health;
         Coroutine aux1 = StartCoroutine("Pattern1_aux1");
         Coroutine aux2 = StartCoroutine("Pattern1_aux2");
         yield return PatternTimer(40.0f);
@@ -75,8 +75,8 @@ public class ClownpieceSketchBehavior : EnemyBehavior
     IEnumerator HellEclipse() {
         // temp yield for loading
         yield return WaitForFixedDuration(1f);
-        health = -1;
-        maxhealth = health;
+        _health = -1;
+        maxhealth = _health;
         StartCoroutine("MoveTo", new Vector2(0f,1f));
         Coroutine aux1 = StartCoroutine("HellEclipse_aux1");
         Coroutine aux2 = StartCoroutine("HellEclipse_aux2");

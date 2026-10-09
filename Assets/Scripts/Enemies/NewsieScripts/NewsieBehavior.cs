@@ -37,12 +37,12 @@ public class NewsieBehavior : EnemyBehavior
 
         _patternList = new Pattern[]
         {
-            new Pattern("Interlude1", 5000, 60, Inter1_aux1()),   
-            new Pattern("Interlude2", 5000, 30, Inter2_aux1()),
-            new Pattern("Interlude3", 5000, 60, Inter3_aux1()),
-            new Pattern("Spell1", 5000, 60, Spell1_aux1(), Spell1_aux2(1), Spell1_aux3(), Spell1_aux4()),  // Sunday Special
-            new Pattern("Spell2", 5000, 60, Spell2_aux1(), Spell2_aux2(), Spell2_aux3()), // Smile to the Camera
-            new Pattern("Spell3", 5000, 60, Spell3_aux1()),
+            new Pattern("Interlude1", 5000, 60, false, Inter1_aux1()),   
+            new Pattern("Interlude2", 5000, 30, false, Inter2_aux1()),
+            new Pattern("Interlude3", 5000, 60, false, Inter3_aux1()),
+            new Pattern("Spell1", 5000, 60, true, Spell1_aux1(), Spell1_aux2(1), Spell1_aux3(), Spell1_aux4()),  // Sunday Special
+            new Pattern("Spell2", 5000, 60, true, Spell2_aux1(), Spell2_aux2(), Spell2_aux3()), // Smile to the Camera
+            new Pattern("Spell3", 5000, 60, true, Spell3_aux1()),
         };
     }
 

@@ -23,7 +23,7 @@ public class ProfessorBehavior : EnemyBehavior
     public IEnumerator Spell1()
     {
         yield return WaitForFixedDuration(1f);
-        health = 5000;
+        _health = 5000;
         maxhealth = 5000;
         yield return MoveTo(new Vector2(0f, 2f));
         Coroutine aux1 = StartCoroutine("Spell1_aux1");

@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey("escape")) {
             Application.Quit();
         }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+            GameObject.Find("Enemy").GetComponent<EnemyBehavior>().Health = 0;
     }
 
     public GameObject[] CreatePool(GameObject bul, int n) {

@@ -36,7 +36,7 @@ public class BlossomBehaviorOLD : EnemyBehavior
     public IEnumerator Spell1()
     {
         yield return WaitForFixedDuration(1f);
-        health = 2500;
+        _health = 2500;
         maxhealth = 2500;
         yield return MoveTo(new Vector2(0f, 2f));
         Coroutine aux1 = StartCoroutine("Spell1_aux1");
@@ -106,7 +106,7 @@ public class BlossomBehaviorOLD : EnemyBehavior
     public IEnumerator Interlude1()
     {
         yield return WaitForFixedDuration(1f);
-        health = 5000;
+        _health = 5000;
         maxhealth = 5000;
         Coroutine aux1 = StartCoroutine("Inter1_aux");
         yield return PatternTimer(90f);

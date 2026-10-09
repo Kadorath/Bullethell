@@ -23,21 +23,25 @@ public class EnemyBehavior : BHEntity
         public string Name;
         public int Health;
         public int Time;
+        public bool IsSpell;
         public IEnumerator[] Routines;
 
-        public Pattern(string name, int hp, int time, params IEnumerator[] routines)
+        public Pattern(string name, int hp, int time, bool isSpell, params IEnumerator[] routines)
         {
             Name = name;
             Health = hp;
             Time = time;
             Routines = routines;
+            IsSpell = isSpell;
         }
     }
 
     // Health
-    [SerializeField] protected int health = -1;
+    [SerializeField] protected int _health = -1;
     protected int maxhealth = -1;
     protected bool transition = false;
+
+    public int Health { get => _health; set => _health = value;}
     
     // Patterns
     protected Pattern[] _patternList;
@@ -52,6 +56,9 @@ public class EnemyBehavior : BHEntity
     private Collider2D[] _collidedBul;
 
     private Image healthbar;
+    protected Animator gameUIAnim;
+    protected RectTransform portrait;
+    protected TextMeshProUGUI spellNameText;
     protected TextMeshProUGUI timer;
     protected GameObject player;
     protected GameManager gameManager;
@@ -62,7 +69,10 @@ public class EnemyBehavior : BHEntity
         gameManager = GameManager.Instance;
 
         healthbar = GameObject.Find("EnemyHealthbar").GetComponent<Image>();
+        gameUIAnim = GameObject.Find("GameViewUI").GetComponent<Animator>();
         timer = GameObject.Find("Timer").GetComponent<TextMeshProUGUI>();
+        portrait = GameObject.Find("Portrait").GetComponent<RectTransform>();
+        spellNameText = GameObject.Find("SpellName").GetComponentInChildren<TextMeshProUGUI>();
 
         _bulletPools = new Dictionary<string, GameObject[]>();
         foreach (PooledBullet bulToPool in _bullets)
@@ -83,11 +93,11 @@ public class EnemyBehavior : BHEntity
 
     void FixedUpdate()
     {
-        if (health == -1) {
+        if (_health == -1) {
             healthbar.fillAmount = 0f;
         }
         else {
-            healthbar.fillAmount = health / (float)maxhealth;
+            healthbar.fillAmount = _health / (float)maxhealth;
         }
         if (_curPattern == null && _patternInd < patterns.Length) {
             Pattern patternToRun = FindPattern(patterns[_patternInd]);
@@ -100,9 +110,9 @@ public class EnemyBehavior : BHEntity
         foreach (Collider2D bul in _collidedBul) {
             bul.gameObject.SetActive(false);
             gameManager.AddScore(10);
-            if (health > 0) { health -= 1; }
+            if (_health > 0) { _health -= 1; }
         }
-        if (health == 0) {
+        if (_health == 0) {
             NextPattern();
         }
     }
@@ -118,17 +128,34 @@ public class EnemyBehavior : BHEntity
 
     private IEnumerator RunPattern(Pattern pattern)
     {
-        yield return WaitForFixedDuration(2f);
-        health = pattern.Health;
+        portrait.transform.position = new Vector3(500f, 300f, 0f);
+        spellNameText.transform.parent.position = new Vector3(-150f, -600f, 0f);
+        gameUIAnim.SetBool("spell", pattern.IsSpell);
+        if (pattern.IsSpell)
+            yield return IntroSpell(pattern);
+        else
+        {
+            yield return WaitForFixedDuration(2f);
+        }
+
+        _health = pattern.Health;
         maxhealth = pattern.Health;
         foreach (IEnumerator routine in pattern.Routines)
             StartCoroutine(routine);
 
-        if (pattern.Time == -1) yield break;;
+        if (pattern.Time == -1) yield break;
         yield return PatternTimer(pattern.Time);
         NextPattern();
     }
-    protected void NextPattern() {
+    private IEnumerator IntroSpell(Pattern pattern)
+    {
+        // Trigger UI for spells
+        spellNameText.text = pattern.Name;
+        gameUIAnim.SetTrigger("patternstart");
+        yield return WaitForFixedDuration(2f);
+    }
+    protected void NextPattern() 
+    {
         // Clear all enemy bullets
         GameObject[] all_bullets = GameObject.FindGameObjectsWithTag("Bullet");
         foreach (GameObject bul in all_bullets) {
@@ -138,7 +165,7 @@ public class EnemyBehavior : BHEntity
         }
 
         _patternInd ++; 
-        health = -1;
+        _health = -1;
         StopAllCoroutines();
         _curPattern = null;
     }

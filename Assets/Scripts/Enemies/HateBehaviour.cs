@@ -10,7 +10,7 @@ public class HateBehaviour : EnemyBehavior
 
         _patternList = new Pattern[]
         {
-            new Pattern("Spell1", 5000, 90, Spell1_aux1())
+            new Pattern("Spell1", 5000, 90, true, Spell1_aux1())
         };
     }
 

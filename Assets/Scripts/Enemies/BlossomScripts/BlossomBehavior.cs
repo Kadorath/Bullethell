@@ -33,17 +33,15 @@ public class BlossomBehavior : EnemyBehavior
 
         _patternList = new Pattern[]
         {
-            new Pattern("Intro", -1, -1, Intro()),
-            new Pattern("Interlude1", 5000, 90, Inter1_aux1()),
-            new Pattern("Interlude2", 5000, 90, Inter2_aux1(), Inter2_aux2()),
-            new Pattern("Interlude3", 5000, 90, Inter3_aux1()),
+            new Pattern("Intro", -1, -1, false, Intro()),
+            new Pattern("Interlude1", 5000, 90, false, Inter1_aux1()),
+            new Pattern("Interlude2", 5000, 90, false, Inter2_aux1(), Inter2_aux2()),
+            new Pattern("Interlude3", 5000, 90, false, Inter3_aux1()),
         };
     }
     public IEnumerator Intro()
     {
         yield return WaitForFixedDuration(1f);
-        health = -1;
-        maxhealth = -1;
         float petal_buffer_width = 4f;
         for (float i = BOUND_Y + petal_buffer_width; i > -BOUND_Y - petal_buffer_width - 3f; i -= Random.Range(0.5f, 2f))
         {
