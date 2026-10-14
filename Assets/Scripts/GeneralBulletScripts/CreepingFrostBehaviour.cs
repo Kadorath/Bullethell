@@ -10,7 +10,7 @@ public class CreepingFrostBehaviour : BulletBehavior
     public override void Spawn()
     {
         base.Spawn();
-        _spreadTimer = Random.Range(0.25f, 3f);
+        _spreadTimer = 0.1f;
         _hasSpread = false;
     }
 
@@ -21,10 +21,19 @@ public class CreepingFrostBehaviour : BulletBehavior
         if (!_hasSpread && _spreadTimer <= 0f)
         {
             _hasSpread = true;
+            // _spreadTimer = Random.Range(4f, 8f);
             Spread();
         }
 
         if (_delayTime > 0) return;
+    }
+
+    protected override void DelayAnimate(float t)
+    {
+        transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX / 3, _finalScaleX, t),
+                                            Mathf.Lerp(_finalScaleY / 3, _finalScaleY, t),
+                                            1f);
+        rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.1f, 0.8f, -1 + t*2));
     }
 
     private void Spread()
@@ -55,8 +64,9 @@ public class CreepingFrostBehaviour : BulletBehavior
         }
     }
 
+
     protected override void OnGraze()
     {
-        DestroySelf();
+        // DestroySelf();
     }
 }

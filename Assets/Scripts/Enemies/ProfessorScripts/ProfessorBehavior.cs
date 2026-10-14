@@ -8,51 +8,42 @@ using Random = UnityEngine.Random;
 public class ProfessorBehavior : EnemyBehavior
 {
     [Header("Bullet Config")]
-    public GameObject bul_cut;
-    public GameObject bul_thrust;
-    public GameObject[] cut_pool;
-    public GameObject[] thrust_pool;
+    public GameObject[] _cardPool;
+    public GameObject[] _cutPool;
+    public GameObject[] _thrustPool;
 
     protected override void InitEnemy()
     {
-        cut_pool = gameManager.CreatePool(bul_cut, 1000);
-        thrust_pool = gameManager.CreatePool(bul_thrust, 1000);
+        _cutPool = _bulletPools["Cut"];
+        _thrustPool = _bulletPools["Thrust"];
+        _cardPool = _bulletPools["Card"];
+
+        _patternList = new Pattern[]
+        {
+            new Pattern("Interlude1", 5000, 90, false, Inter_main()),
+            new Pattern("Blossfechten", 5000, 90, true)
+        };
     }
 
-    // Blossfechten
-    public IEnumerator Spell1()
-    {
-        yield return WaitForFixedDuration(1f);
-        _health = 5000;
-        maxhealth = 5000;
-        yield return MoveTo(new Vector2(0f, 2f));
-        Coroutine aux1 = StartCoroutine("Spell1_aux1");
-        yield return PatternTimer(90f);
-        NextPattern();
-    }
 
-    IEnumerator Spell1_aux1()
+    IEnumerator Inter_main()
     {
         yield return new WaitForSeconds(1f);
         while(true)
         {
-            // Vector2 vertOffset = Random.insideUnitCircle.normalized * 1.5f;
-            // vertOffset = new Vector2(vertOffset.x, Mathf.Abs(vertOffset.y)) * 1.5f;
-            // Vector2 moveTarget = (Vector2)player.transform.position + vertOffset;
-            Vector2 moveTarget = player.transform.position + ((transform.position-player.transform.position).normalized * 2.5f);
+            Vector2 moveTarget = player.transform.position + ((transform.position-player.transform.position).normalized * 3.5f);
             
             yield return MoveTo(moveTarget, 0.4f);
             yield return new WaitForSeconds(0.5f);
 
             Vector2 toPlayer = (player.transform.position - transform.position).normalized;
-            StartCoroutine(Ort(toPlayer));
 
-            int strike = Random.Range(0, 5);
+            int strike = Random.Range(0, 6);
+            strike = 0;
             switch (strike)
             {
                 case 0:
-                    float dist = Math.Min(1.5f, Vector2.Distance(player.transform.position, transform.position)-0.2f);
-                    StartCoroutine(Cut_Zornhau(toPlayer, distance:dist));
+                    StartCoroutine(Cut_Zornhau(toPlayer));
                     break;
                 case 1:
                     StartCoroutine(Cut_Krumphau(toPlayer, Random.value < 0.5f));
@@ -72,47 +63,68 @@ public class ProfessorBehavior : EnemyBehavior
                 case 4:
                     StartCoroutine(Cut_Scheitelhau(toPlayer));
                     break;
+                case 5:
+                    StartCoroutine(Ort(toPlayer));
+                    break;
             }
 
-            // yield return new WaitForSeconds(2f);
-            // yield return MoveTo(new Vector2(0f, 2f));
-            yield return new WaitForSeconds(Random.Range(0.75f, 2f));
+            yield return new WaitForSeconds(Random.Range(1.25f, 2.5f));
         }
     }
 
-    IEnumerator Cut_Zornhau(Vector2 direction, float length=6f, float distance=2f)
+    IEnumerator Cut_Zornhau(Vector2 direction, float length=8f)
     {
+        int bul_count = 16;
+        float half_bc = bul_count/2f;
+
+        float distance = Vector2.Distance(player.transform.position, transform.position)-(half_bc / (half_bc*half_bc));
         Vector2 cutDirection = new Vector2(-direction.y, direction.x);
         Vector2 cutCenter = (Vector2)transform.position + (direction * distance);
         Vector2 startPoint = cutCenter - (length/2 * cutDirection);
         Vector2 endPoint = cutCenter + (length/2 * cutDirection);
         Debug.DrawLine(startPoint, endPoint, Color.blue, 4f);
         Debug.DrawLine(transform.position, transform.position+(Vector3)(direction*distance), Color.white, 4f);
+        IndicateCut(startPoint, endPoint);
+        yield return WaitForFixedDuration(1f);
 
         foreach (Collider2D hit in Physics2D.OverlapAreaAll(startPoint-direction*0.3f, endPoint+direction*0.3f, LayerMask.GetMask("PlayerBullets")))
         {
             hit.gameObject.SetActive(false);
         }
 
-        int bul_count = 24;
-        float half_bc = bul_count/2f;
         for (int i = 0; i <= bul_count; i ++)
         {
             float t = ((float)i)/bul_count;
             Vector2 pos = new Vector2(Mathf.Lerp(startPoint.x, endPoint.x, t), Mathf.Lerp(startPoint.y, endPoint.y, t));
             pos += direction * 0.3f * (-i*(i-bul_count) / (half_bc * half_bc));
-            SpawnKeyedBullet(cut_pool, pos, 
+
+            SpawnKeyedBullet(_cutPool, pos, 
                 new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
-                new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
+                new Dictionary<int, float>{ [0] = 0, [45] = 0, [60] = Random.Range(0.25f, 0.5f) }, 
+            0.15f
             );
-            SpawnKeyedBullet(cut_pool, pos + direction*0.2f, 
-                new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
-                new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
-            );
-            SpawnKeyedBullet(cut_pool, pos + direction*0.4f, 
-                new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
-                new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
-            );
+            
+            if (i >= 1 && i <= bul_count-1)
+            {
+                SpawnKeyedBullet(_cardPool, pos + direction*0.1f, 
+                    new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
+                    new Dictionary<int, float>{ [0] = 0, [45] = 0, [180] = Random.Range(3f, 6f) }, 
+                0.15f
+                );
+                SpawnKeyedBullet(_cardPool, pos + direction*-0.1f, 
+                    new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
+                    new Dictionary<int, float>{ [0] = 0, [45] = 0, [180] = Random.Range(3f, 6f) }, 
+                0.15f
+                );
+            }
+            // SpawnKeyedBullet(_cutPool, pos + direction*0.2f, 
+            //     new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
+            //     new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
+            // );
+            // SpawnKeyedBullet(_cutPool, pos + direction*0.4f, 
+            //     new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
+            //     new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
+            // );
             yield return new WaitForSeconds(0.001f);
         }
     }
@@ -131,7 +143,7 @@ public class ProfessorBehavior : EnemyBehavior
             Vector2 pos = cutCenter;
             pos += Vector2.Lerp(flipMod*cutDirection*2f, Vector2.zero, t);
             pos += direction * distance*(1 + c3*Mathf.Pow(t-1,3) + c1*Mathf.Pow(t-1, 2f));
-            SpawnKeyedBullet(cut_pool, pos, 
+            SpawnKeyedBullet(_cutPool, pos, 
                 new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
                 new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
             );
@@ -160,7 +172,7 @@ public class ProfessorBehavior : EnemyBehavior
             float t = !flip ? (((float)i)/bul_count) : (1f - ((float)i/bul_count));
             Vector2 pos = new Vector2(Mathf.Lerp(startPoint.x, endPoint.x, t), Mathf.Lerp(startPoint.y, endPoint.y, t));
             pos += direction * 0.3f * (-i*(i-bul_count) / (half_bc * half_bc));
-            SpawnKeyedBullet(cut_pool, pos, 
+            SpawnKeyedBullet(_cutPool, pos, 
                 new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
                 new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
             );
@@ -190,7 +202,7 @@ public class ProfessorBehavior : EnemyBehavior
             float t = ((float)i)/bul_count;
             Vector2 pos = new Vector2(Mathf.Lerp(startPoint.x, endPoint.x, t), Mathf.Lerp(startPoint.y, endPoint.y, t));
             pos += direction * 0.3f * (-i*(i-bul_count) / (half_bc * half_bc));
-            SpawnKeyedBullet(cut_pool, pos, 
+            SpawnKeyedBullet(_cutPool, pos, 
                 new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
                 new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
             );
@@ -207,7 +219,7 @@ public class ProfessorBehavior : EnemyBehavior
         {
             float t = InOutBack(((float)i)/bul_count);
             Vector2 pos = Vector2.LerpUnclamped(startPoint, endPoint, t);
-            SpawnKeyedBullet(cut_pool, pos, 
+            SpawnKeyedBullet(_cutPool, pos, 
                 new Dictionary<int, float>{ [0] = Random.Range(0, 360f) },
                 new Dictionary<int, float>{ [0] = 0, [20] = 0, [60] = Random.Range(1f, 4f) }
             );
@@ -229,9 +241,18 @@ public class ProfessorBehavior : EnemyBehavior
             float t = ((float)i)/bul_count;
             Vector2 pos = new Vector2(Mathf.Lerp(startPoint.x, endPoint.x, t), Mathf.Lerp(startPoint.y, endPoint.y, t));
             float speed = 1f + -Mathf.Abs(i-(bul_count/2f)) + (bul_count/2f);
-            SpawnStraightBullet(thrust_pool, pos, direction, speed, rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+            SpawnStraightBullet(_thrustPool, pos, direction, speed, 
+                rotation:Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f,
+                speedChangeDuration:1f, startSpeedMod: 3f, finalSpeedMod:1f);
         }
 
         yield return null;
+    }
+
+    private void IndicateCut(Vector3 start, Vector3 end)
+    {
+        GameObject indicator = new GameObject();
+        LineRenderer line = indicator.AddComponent<LineRenderer>();
+        line.SetPositions(new Vector3[] { start, end } );
     }
 }

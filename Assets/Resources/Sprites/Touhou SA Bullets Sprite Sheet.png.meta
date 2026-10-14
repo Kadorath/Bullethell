@@ -716,7 +716,7 @@ TextureImporter:
         width: 16
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -725,6 +725,50 @@ TextureImporter:
       bones: []
       spriteID: f2cd02df2644e92489b500e1c596e171
       internalID: 1284638541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: star_yellow
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 647
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00608943a93093a42bd00bedad81683f
+      internalID: -685097414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamond_black
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 710
+        width: 8
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82e3395bd9f6ad7498177c502d3cbda0
+      internalID: -982481558
       vertices: []
       indices: 
       edges: []
@@ -758,6 +802,7 @@ TextureImporter:
       bright_yellow: 1628812142
       card_white: 309039354
       circle_black: -249570398
+      diamond_black: -982481558
       diamond_blue: -306942007
       diamond_pink: 1705622924
       hammer_blue: 27861225
@@ -770,6 +815,7 @@ TextureImporter:
       soul: -1138030930
       spotlight: 118397497
       star_white: 1284638541
+      star_yellow: -685097414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

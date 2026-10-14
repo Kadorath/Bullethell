@@ -219,7 +219,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.8
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -413,6 +413,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2907760908233983809, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3385517609774607920, guid: 3bc2e411d8f72e84eaec39078cd316d6, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -571,9 +591,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 4
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 1763814872909086720
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
@@ -611,6 +635,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1763814872909086720
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 4
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: -2
 --- !u!4 &619394802
 Transform:
   m_ObjectHideFlags: 0
@@ -648,7 +685,7 @@ GameObject:
   m_IsActive: 1
 --- !u!212 &1073046972
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -705,6 +742,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!4 &1073046973
 Transform:
   m_ObjectHideFlags: 0
@@ -806,15 +844,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1c72cff7038d249ae09dfe7b30f16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProfessorBehavior
-  health: 25000
+  _health: -1
   patterns:
-  - Spell1
-  timer: {fileID: 0}
-  player: {fileID: 0}
-  bul_cut: {fileID: 1501150196022406135, guid: ac1d213b99cb157438f2700f729dcfb1, type: 3}
-  bul_thrust: {fileID: 1501150196022406135, guid: f1bf800770c9dfa4e828db968837acde, type: 3}
-  cut_pool: []
-  thrust_pool: []
+  - Interlude1
+  _bullets:
+  - Name: Card
+    Bullet: {fileID: 1501150196022406135, guid: 507f6f247bdb0aa41b41d0abb82e8d9d, type: 3}
+    Sprite: {fileID: 309039354, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+    Amount: 1000
+  - Name: Cut
+    Bullet: {fileID: 1501150196022406135, guid: 507f6f247bdb0aa41b41d0abb82e8d9d, type: 3}
+    Sprite: {fileID: -982481558, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+    Amount: 1000
+  - Name: Thrust
+    Bullet: {fileID: 1501150196022406135, guid: 507f6f247bdb0aa41b41d0abb82e8d9d, type: 3}
+    Sprite: {fileID: 1658665615, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+    Amount: 1000
+  _cardPool: []
+  _cutPool: []
+  _thrustPool: []
 --- !u!1001 &1522528068
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -977,6 +1025,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1016,7 +1065,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1671678545
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1073,6 +1122,7 @@ SpriteRenderer:
   m_SpriteTileMode: 1
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1864247300
 GameObject:
   m_ObjectHideFlags: 0

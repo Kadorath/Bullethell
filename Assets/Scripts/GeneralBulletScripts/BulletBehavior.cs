@@ -5,11 +5,16 @@ public class BulletBehavior : MonoBehaviour
 {
     public const float RADTODEG = 180/Mathf.PI;
 
+    private Transform _poolParent;
+
     public float indicateTime;
     protected float _delayTime;
+    public bool IsSpawned { get => _delayTime <= 0f; }
+    protected bool _paused = false;
+    public bool Paused { get => _paused; set => _paused = value; }
     [SerializeField] protected float _finalScaleX;
     [SerializeField] protected float _finalScaleY;
-    public bool spin = false;
+    public int spin = 0;
     public bool reserve = false;
     protected Sprite _defaultSprite;
     protected int _baseSortingOrder;
@@ -31,6 +36,7 @@ public class BulletBehavior : MonoBehaviour
     void Awake()
     {
         rend = GetComponentInChildren<SpriteRenderer>();
+        if (rend == null) rend = gameObject.AddComponent<SpriteRenderer>();
         _defaultSprite = rend.sprite;
         default_color = rend.color;
         _baseSortingOrder = rend.sortingOrder;
@@ -40,13 +46,11 @@ public class BulletBehavior : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (_paused) return;
         if (_delayTime > 0)
         {
             _delayTime -= Time.fixedDeltaTime;
-            transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX / 3, _finalScaleX * 2, _delayTime / indicateTime)
-                                                , Mathf.Lerp(_finalScaleY / 3, _finalScaleY * 2, _delayTime / indicateTime),
-                                                1f);
-            rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.8f, 0.5f, _delayTime / indicateTime / 2));
+            DelayAnimate(1f - _delayTime / indicateTime);
 
             if (_delayTime <= 0f)
             {
@@ -58,14 +62,23 @@ public class BulletBehavior : MonoBehaviour
         }
     }
 
+    protected virtual void DelayAnimate(float t)
+    {
+        transform.localScale = new Vector3(Mathf.Lerp(_finalScaleX * 2, _finalScaleX / 3, t),
+                                            Mathf.Lerp(_finalScaleY * 2, _finalScaleY / 3, t),
+                                            1f);
+        rend.color = default_color * new Color(1f, 1f, 1f, Mathf.Lerp(0.5f, 0.8f, -1 - t*2));
+    }
+
     public virtual void Spawn()
     {
         _delayTime = indicateTime;
-
+        _paused = false;
         if (_delayTime > 0f)
         {
             rend.color = default_color * new Color(1f, 1f, 1f, 0.5f);
             rend.sprite = delaySpawnVFXSprite == null ? _defaultSprite : delaySpawnVFXSprite;
+            DelayAnimate(0f);
             rend.sortingOrder = 100;
         }
         else
@@ -74,8 +87,6 @@ public class BulletBehavior : MonoBehaviour
             rend.sortingOrder = _baseSortingOrder;
         }
     }
-
-    public bool IsSpawned() { return _delayTime <= 0f; }
 
     public bool Graze(Transform player)
     {
@@ -127,11 +138,19 @@ public class BulletBehavior : MonoBehaviour
         ResetGraze();
         transform.localScale = new Vector3(_finalScaleX, _finalScaleY, 1f);
         gameObject.SetActive(false);
+        if (_poolParent != null)
+            transform.SetParent(_poolParent);
     }
 
     public void SetSprite(Sprite spr)
     {
         rend.sprite = spr;
         _defaultSprite = spr;
+    }
+
+    public void SetPoolParent(Transform parent)
+    {
+        _poolParent = parent;
+        transform.SetParent(_poolParent);
     }
 }

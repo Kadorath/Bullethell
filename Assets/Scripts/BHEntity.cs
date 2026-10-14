@@ -244,10 +244,8 @@ public class BHEntity : MonoBehaviour
     }
 
     // Easing Functions
-    protected float InOutCubic(float x)
-    {
-        return x < 0.5f ? 4f * x * x * x : 1f - Mathf.Pow(-2 * x + 2, 3) / 2f;
-    }
+    protected float InOutQuint(float x) => x < 0.5f ? 16f * x * x * x * x * x : 1 - Mathf.Pow(-2f * x + 2, 5) / 2f;
+    protected float InOutCubic(float x) => x < 0.5f ? 4f * x * x * x : 1f - Mathf.Pow(-2 * x + 2, 3) / 2f;
     protected float InOutBack(float x)
     {
         float c1 = 1.70158f;

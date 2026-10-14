@@ -858,12 +858,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: -1
   patterns:
-  - Spell1
-  - Spell3
-  - Spell2
-  - Interlude1
   - Interlude3
   - Interlude2
+  - Spell2
+  - Spell3
+  - Interlude1
+  - Spell1
+  - Spell4
   _bullets:
   - Name: Paper Ball
     Bullet: {fileID: 1501150196022406135, guid: 9bcad2197c67c1a4bbb7ebe04cae5587, type: 3}
@@ -880,6 +881,10 @@ MonoBehaviour:
   - Name: Star
     Bullet: {fileID: 1501150196022406135, guid: 507f6f247bdb0aa41b41d0abb82e8d9d, type: 3}
     Sprite: {fileID: 1284638541, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+    Amount: 800
+  - Name: Star2
+    Bullet: {fileID: 1501150196022406135, guid: 507f6f247bdb0aa41b41d0abb82e8d9d, type: 3}
+    Sprite: {fileID: -685097414, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
     Amount: 800
   snapshot: {fileID: 4436928575677981856, guid: de779fd8b11facd4f91d1c68e09ebba0, type: 3}
 --- !u!1001 &1522528068

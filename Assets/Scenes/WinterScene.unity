@@ -219,7 +219,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.8
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -844,14 +844,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07baf12d0763814890e40e80c6626b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WinterBehavior
-  health: 25000
+  _health: -1
+  patterns:
+  - Spell1
   _bullets:
   - Name: Creeping Frost
     Bullet: {fileID: 1501150196022406135, guid: 26d327e0a8b62c94eb63c228f2b13349, type: 3}
     Sprite: {fileID: 0}
     Amount: 4000
-  patterns:
-  - Spell1
+  icefirePrefab: {fileID: 1501150196022406135, guid: 089e2adb721ded34b92a176501281812, type: 3}
 --- !u!1001 &1522528068
 PrefabInstance:
   m_ObjectHideFlags: 0

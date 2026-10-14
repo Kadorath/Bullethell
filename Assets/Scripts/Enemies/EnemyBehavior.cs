@@ -226,52 +226,74 @@ public class EnemyBehavior : BHEntity
         transform.position = dest;
     }
 
-    protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle, Vector2 target_scale) {
-        float total_dist = Vector2.Distance(bul.transform.position,target_pos);
-        float start_rot = bul.transform.eulerAngles.z;
-        float start_scale_x = bul.transform.localScale.x;
-        float start_scale_y = bul.transform.localScale.y;
-        for (float dist = total_dist; dist >= 0.01f; // TODO: This needs to not just be based on distance.
-            dist = Vector2.Distance(bul.transform.position,target_pos)) {
-                bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
-                    *speed*Time.fixedDeltaTime, Space.World);
-            bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,Mathf.Lerp(start_rot,target_angle,1 - dist/total_dist)));
-            bul.transform.localScale = new Vector3(Mathf.Lerp(start_scale_x, target_scale.x, 1 - dist/total_dist),
-                                                Mathf.Lerp(start_scale_y, target_scale.y, 1 - dist/total_dist),
-                                                1f);
+    protected IEnumerator MoveBullet(GameObject bul, float duration, Vector3? targetPos=null, float? targetAngle=null, Vector2? targetScale=null, Func<float,float> easing=null)
+    {
+        if (easing == null) easing = InOutCubic;
+        Vector3 startPos = bul.transform.position;
+        float startAngle = bul.transform.eulerAngles.z;
+        Vector2 startScale = bul.transform.localScale;
+
+        float elapsed = 0f;
+        while (elapsed <= duration)
+        {
+            elapsed += Time.fixedDeltaTime;
+            float t = easing(elapsed/duration);
+            if (targetPos.HasValue)
+                bul.transform.position = Vector3.Lerp(startPos, targetPos.Value, t);
+            if (targetAngle.HasValue)
+                bul.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Mathf.LerpAngle(startAngle, targetAngle.Value, t)));
+            if (targetScale.HasValue)
+                bul.transform.localScale = Vector2.Lerp(startScale, targetScale.Value, t);
             yield return new WaitForFixedUpdate();
         }
-
-        bul.transform.position = target_pos;
-        bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
-        bul.transform.localScale = new Vector3(target_scale.x, target_scale.y, 1f);
     }
 
-    protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle) {
-        float total_dist = Vector2.Distance(bul.transform.position,target_pos);
-        float start_rot = bul.transform.eulerAngles.z;
-        float angleToTurn = Mathf.DeltaAngle(start_rot, target_angle);
-        for (float dist = total_dist; dist >= 0.1f;
-            dist = Vector2.Distance(bul.transform.position,target_pos)) {
-                bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
-                    *speed*Time.fixedDeltaTime, Space.World);
-                    bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,start_rot + Mathf.Lerp(0f, angleToTurn, 1 - dist/total_dist)));
-            yield return new WaitForFixedUpdate();
-        }
+    // protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle, Vector2 target_scale) {
+    //     float total_dist = Vector2.Distance(bul.transform.position,target_pos);
+    //     float start_rot = bul.transform.eulerAngles.z;
+    //     float start_scale_x = bul.transform.localScale.x;
+    //     float start_scale_y = bul.transform.localScale.y;
+    //     for (float dist = total_dist; dist >= 0.01f; // TODO: This needs to not just be based on distance.
+    //         dist = Vector2.Distance(bul.transform.position,target_pos)) {
+    //             bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
+    //                 *speed*Time.fixedDeltaTime, Space.World);
+    //         bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,Mathf.Lerp(start_rot,target_angle,1 - dist/total_dist)));
+    //         bul.transform.localScale = new Vector3(Mathf.Lerp(start_scale_x, target_scale.x, 1 - dist/total_dist),
+    //                                             Mathf.Lerp(start_scale_y, target_scale.y, 1 - dist/total_dist),
+    //                                             1f);
+    //         yield return new WaitForFixedUpdate();
+    //     }
 
-        bul.transform.position = target_pos;
-        bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
-    }
+    //     bul.transform.position = target_pos;
+    //     bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
+    //     bul.transform.localScale = new Vector3(target_scale.x, target_scale.y, 1f);
+    // }
 
-    protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos) {
-        float total_dist = Vector2.Distance(bul.transform.position,target_pos);
-        for (float dist = total_dist; dist >= 0.001f;
-            dist = Vector2.Distance(bul.transform.position,target_pos)) {
-                bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
-                    *speed*Time.fixedDeltaTime, Space.World);
-            yield return new WaitForFixedUpdate();
-        }     
-    }
+    // protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos, float target_angle) {
+    //     float total_dist = Vector2.Distance(bul.transform.position,target_pos);
+    //     float start_rot = bul.transform.eulerAngles.z;
+    //     float angleToTurn = Mathf.DeltaAngle(start_rot, target_angle);
+    //     for (float dist = total_dist; dist >= 0.1f;
+    //         dist = Vector2.Distance(bul.transform.position,target_pos)) {
+    //             bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
+    //                 *speed*Time.fixedDeltaTime, Space.World);
+    //                 bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,start_rot + Mathf.Lerp(0f, angleToTurn, 1 - dist/total_dist)));
+    //         yield return new WaitForFixedUpdate();
+    //     }
+
+    //     bul.transform.position = target_pos;
+    //     bul.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,target_angle));
+    // }
+
+    // protected IEnumerator MoveBullet(GameObject bul, float speed, Vector2 target_pos) {
+    //     float total_dist = Vector2.Distance(bul.transform.position,target_pos);
+    //     for (float dist = total_dist; dist >= 0.001f;
+    //         dist = Vector2.Distance(bul.transform.position,target_pos)) {
+    //             bul.transform.Translate(((Vector3)target_pos-bul.transform.position)
+    //                 *speed*Time.fixedDeltaTime, Space.World);
+    //         yield return new WaitForFixedUpdate();
+    //     }     
+    // }
 
     protected Vector2 RotateVector(Vector2 v, float angle)
     {
@@ -325,8 +347,9 @@ public class EnemyBehavior : BHEntity
         }
     }
 
-    protected void SpawnSquareRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f, float noise=0f)
+    protected List<GameObject> SpawnSquareRing(GameObject[] bul_pool, Vector3 origin, int bul_num=8, float rotation=0f, float speed=0f, float speedChangeDuration=0f, float startSpeedMod=1f, float finalSpeedMod=1f, float noise=0f, float delay=0.15f)
     {
+        List<GameObject> spawnedBullets = new List<GameObject>();
         for (int i = 0; i < bul_num; i ++)
         {
             float squareOffset = Mathf.Lerp(1f, -1f, i/(bul_num-1f));
@@ -335,13 +358,14 @@ public class EnemyBehavior : BHEntity
                 dir = RotateVector(dir, rotation);
                 float baseSpeed = speed;
                 float trueSpeed = baseSpeed * Mathf.Sqrt(1f+Mathf.Pow(Mathf.Lerp(0f, 1f, Mathf.Abs((i/((bul_num-1)/2f)) - 1f)), 2));
-                SpawnStraightBullet(
+                spawnedBullets.Add(SpawnStraightBullet(
                     bul_pool, origin+(Vector3)Random.insideUnitCircle*noise,
-                    direction:dir, speed:trueSpeed, delay:0.15f, 
+                    direction:dir, speed:trueSpeed, delay:delay, 
                     rotation:Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f,
                     speedChangeDuration:speedChangeDuration, startSpeedMod:startSpeedMod, finalSpeedMod:finalSpeedMod
-                );
+                ));
             }
         }
+        return spawnedBullets;
     }
 }

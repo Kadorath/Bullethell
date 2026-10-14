@@ -5,6 +5,10 @@ public class WinterBehaviour : EnemyBehavior
 {
     private static WinterBehaviour Instance;
     private GameObject[] _frostPool;
+
+    [Header("Additional Bullet Config")]
+    public GameObject icefirePrefab;
+
     protected override void InitEnemy()
     {
         _frostPool = _bulletPools["Creeping Frost"];
@@ -18,8 +22,18 @@ public class WinterBehaviour : EnemyBehavior
     public IEnumerator Spell1_aux1()
     {
         yield return WaitForFixedDuration(1f);
-        SpawnFrostBullet(_frostPool, transform.position, delay:0.3f);
-        SpawnFrostBullet(_frostPool, transform.position + (Vector3)Random.onUnitCircle*5f, delay:0.3f);
+        SpawnFrostBullet(_frostPool, transform.position, delay:0.4f);
+
+        yield return WaitForFixedDuration(4f);
+
+        for (int i = 0; i < 6; i ++)
+        {
+            Vector2 pos = transform.position;
+            float theta = i*(2*Mathf.PI) / 6f;
+            pos = new Vector2(pos.x + 3f*Mathf.Cos(theta), pos.y + 3f*Mathf.Sin(theta));
+            SpawnIceFire(pos);   
+            yield return WaitForFixedDuration(0.1f);
+        }
     }
 
     // Spawning function for the unique Creeping Frost bullet type used by this enemy
@@ -37,6 +51,15 @@ public class WinterBehaviour : EnemyBehavior
         cbb.indicateTime = delay;
         cbb.Spawn();
         bul.SetActive(true);
+        return bul;
+    }
+
+    private GameObject SpawnIceFire(Vector2 position)
+    {
+        GameObject bul = Instantiate(icefirePrefab);
+        bul.transform.position = position;
+        IceFireBehaviour ifb = bul.GetComponent<IceFireBehaviour>();
+        ifb.Spawn();
         return bul;
     }
     // Public static overload of the SpawnFrostBullet method to give access to this method to

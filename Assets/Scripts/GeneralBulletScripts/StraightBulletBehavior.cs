@@ -27,6 +27,7 @@ public class StraightBulletBehavior : BulletBehavior
 
     protected override void FixedUpdate()
     {
+        if (_paused) return;
         base.FixedUpdate();
         _elapsedTime += Time.fixedDeltaTime;
 
@@ -55,8 +56,8 @@ public class StraightBulletBehavior : BulletBehavior
             }
             if (alignWithDirection)
                 transform.rotation = Quaternion.Euler(0f, 0f, RADTODEG*Mathf.Atan2(moveDir.y, moveDir.x) - 90f);
-            if (spin)
-                rend.transform.Rotate(new Vector3(0f, 0f, 1f));
+            if (spin != 0)
+                transform.Rotate(new Vector3(0f, 0f, spin * 0.2f));
         }
     }
 

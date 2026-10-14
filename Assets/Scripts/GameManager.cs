@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
             new_pool[i] = Instantiate(bul, new_pool_holder.transform);
             new_pool[i].SetActive(false);
             new_pool[i].name = bul.name;
+            new_pool[i].GetComponent<BulletBehavior>().SetPoolParent(new_pool_holder.transform);
         }
         return new_pool;
     }

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8735695252801555595}
   - component: {fileID: 6419243387994070436}
-  - component: {fileID: -8374915723499519012}
+  - component: {fileID: 1252031114279020944}
   m_Layer: 7
-  m_Name: bul_card_wht 1
+  m_Name: IceFireBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4807289673036312820}
@@ -69,8 +69,8 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.05
---- !u!114 &-8374915723499519012
+  m_Radius: 0.25
+--- !u!114 &1252031114279020944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,24 +79,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1501150196022406135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a8566c3f1e97114f87f1327c08cd597, type: 3}
+  m_Script: {fileID: 11500000, guid: edcc6889b3837364e8879caf8495203f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StraightBulletBehavior
-  speed: 0
-  indicate_time: 0
-  final_scale_x: 0
-  final_scale_y: 0
+  m_EditorClassIdentifier: '::'
+  indicateTime: 0
+  _finalScaleX: 0
+  _finalScaleY: 0
   spin: 0
   reserve: 0
   delaySpawnVFXSprite: {fileID: 0}
   dontDestroyOnPatternChange: 0
-  can_graze: 1
-  graze_val: 10
-  grazing: 0
-  dist: -1
+  _grazing: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
-  direction: {x: 0, y: 0}
 --- !u!1 &4841814528553665127
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,14 +119,14 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8735695252801555595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5594010482721360253
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -176,15 +171,16 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 309039354, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 0.08962262, g: 0.40683055, b: 1, a: 0.8}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.08, y: 0.16}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
