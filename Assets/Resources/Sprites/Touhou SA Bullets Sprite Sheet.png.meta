@@ -760,7 +760,7 @@ TextureImporter:
         width: 8
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -769,6 +769,28 @@ TextureImporter:
       bones: []
       spriteID: 82e3395bd9f6ad7498177c502d3cbda0
       internalID: -982481558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: drop_darkblue
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 743
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f897b49e26281641887db6ad6d349c1
+      internalID: -1690643385
       vertices: []
       indices: 
       edges: []
@@ -788,6 +810,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Touhou SA Bullets Sprite Sheet_1: 229930794
+      Touhou SA Bullets Sprite Sheet_2: 1567730894
       arrow_black: 1658665615
       arrow_darkblue: 1447117009
       arrow_yellow: 191451879
@@ -805,6 +828,7 @@ TextureImporter:
       diamond_black: -982481558
       diamond_blue: -306942007
       diamond_pink: 1705622924
+      drop_darkblue: -1690643385
       hammer_blue: 27861225
       hammer_cyan: 1454419061
       hammer_green: -309189383

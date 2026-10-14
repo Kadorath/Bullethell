@@ -22,17 +22,18 @@ public class WinterBehaviour : EnemyBehavior
     public IEnumerator Spell1_aux1()
     {
         yield return WaitForFixedDuration(1f);
-        SpawnFrostBullet(_frostPool, transform.position, delay:0.4f);
+        SpawnFrostBullet(_frostPool, transform.position, delay:0.2f);
 
         yield return WaitForFixedDuration(4f);
-
+        
         for (int i = 0; i < 6; i ++)
         {
             Vector2 pos = transform.position;
             float theta = i*(2*Mathf.PI) / 6f;
             pos = new Vector2(pos.x + 3f*Mathf.Cos(theta), pos.y + 3f*Mathf.Sin(theta));
-            SpawnIceFire(pos);   
-            yield return WaitForFixedDuration(0.1f);
+            GameObject iceFire = SpawnIceFire(pos);   
+            yield return WaitForFixedDuration(0.15f);
+            iceFire.GetComponent<IceFireBehaviour>().SetTargetPosition(player.transform.position);
         }
     }
 

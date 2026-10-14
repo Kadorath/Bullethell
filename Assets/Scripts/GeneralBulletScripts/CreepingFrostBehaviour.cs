@@ -6,16 +6,24 @@ public class CreepingFrostBehaviour : BulletBehavior
 {
     private float _spreadTimer = 0f;
     private bool _hasSpread = false;
-
+    [SerializeField] Sprite frozenSprite;
+    [SerializeField] Sprite meltedSprite;
+    private GravityBulletBehaviour _gb;
+    
     public override void Spawn()
     {
         base.Spawn();
+        if (_gb == null) _gb = GetComponent<GravityBulletBehaviour>();
+        _gb.enabled = false;
+        rend.sprite = frozenSprite;
+        _defaultSprite = frozenSprite;
         _spreadTimer = 0.1f;
         _hasSpread = false;
     }
 
     protected override void FixedUpdate()
     {
+        if (_paused) return;
         base.FixedUpdate();
         _spreadTimer -= Time.fixedDeltaTime;
         if (!_hasSpread && _spreadTimer <= 0f)
@@ -59,9 +67,24 @@ public class CreepingFrostBehaviour : BulletBehavior
             if (!Physics2D.OverlapCircle(pos, 0.2f, LayerMask.GetMask("EnemyBullets","Player")))
             {
                 if (Random.value < 0.5f)
-                    WinterBehaviour.SpawnFrostBullet(pos, 0.1f);
+                    WinterBehaviour.SpawnFrostBullet(pos, indicateTime);
             }
         }
+    }
+
+    public void Refresh()
+    {
+        _spreadTimer = 2f;
+        _hasSpread = false;
+    }
+
+    public void Melt()
+    {
+        _paused = true;
+        _defaultSprite = meltedSprite;
+        rend.sprite = meltedSprite;
+        _gb.enabled = true;
+        _gb.direction = Vector2.zero;
     }
 
 

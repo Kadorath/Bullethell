@@ -851,7 +851,7 @@ MonoBehaviour:
   - Name: Creeping Frost
     Bullet: {fileID: 1501150196022406135, guid: 26d327e0a8b62c94eb63c228f2b13349, type: 3}
     Sprite: {fileID: 0}
-    Amount: 4000
+    Amount: 3000
   icefirePrefab: {fileID: 1501150196022406135, guid: 089e2adb721ded34b92a176501281812, type: 3}
 --- !u!1001 &1522528068
 PrefabInstance:

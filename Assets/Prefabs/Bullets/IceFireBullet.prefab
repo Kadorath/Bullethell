@@ -90,8 +90,10 @@ MonoBehaviour:
   delaySpawnVFXSprite: {fileID: 0}
   dontDestroyOnPatternChange: 0
   _grazing: 0
+  _canGraze: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
+  _targetPos: {x: 0, y: 0}
 --- !u!1 &4841814528553665127
 GameObject:
   m_ObjectHideFlags: 0

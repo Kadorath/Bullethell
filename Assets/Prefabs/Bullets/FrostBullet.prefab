@@ -57,6 +57,8 @@ MonoBehaviour:
   _grazing: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
+  frozenSprite: {fileID: -674790532, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
+  meltedSprite: {fileID: -1690643385, guid: 11655beae1f51344c8ffee8de86d6a45, type: 3}
 --- !u!114 &-8036327800827241593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +81,7 @@ MonoBehaviour:
   _grazing: 0
   graze_color: {r: 1, g: 0.75, b: 0.75, a: 1}
   default_color: {r: 1, g: 1, b: 1, a: 1}
-  speed: 0
+  speed: 0.7
   direction: {x: 0, y: 0}
   alignWithDirection: 0
   turnSpeed: 0

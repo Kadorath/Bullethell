@@ -25,7 +25,7 @@ public class BulletBehavior : MonoBehaviour
     [SerializeField] private bool _grazing = false;
     private float _grazeDistToPlayer = -1f;
     private float _grazeVal = 10f;
-    private bool _canGraze = true;
+    [SerializeField] private bool _canGraze = true;
     public float GrazeVal { get => _grazeVal; }
     public Color graze_color = new Color(1f, .75f, .75f, 1f);
     public Color default_color = new Color(1f, 1f, 1f, 1f);
